@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ingredients — Menu Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <span class="brand">Menu Calculator</span>
+    <a href="index.html">Dashboard</a>
+    <a href="ingredients.html" class="active">Ingredients</a>
+    <div class="mdr-control">
+      MDR <input type="number" id="mdrInput" min="0" max="100" step="0.1"> %
+    </div>
+  </nav>
+  <main>
+    <section>
+      <h2>Ingredients</h2>
+      <table id="ingTable">
+        <thead>
+          <tr>
+            <th>Name</th><th>Bulk Qty</th><th>Unit</th><th>Bulk Price (฿)</th><th>Cost / Unit (฿)</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="ingBody"></tbody>
+      </table>
+      <div class="add-row mt-2">
+        <button class="btn btn-primary btn-sm" id="showAddBtn">+ Add Ingredient</button>
+        <form id="addForm" style="display:none">
+          <input name="name" placeholder="Name" required>
+          <input name="bulkQty" type="number" min="0.001" step="any" placeholder="Qty" required>
+          <input name="bulkUnit" placeholder="Unit (g/ml/pcs)" required>
+          <input name="bulkPrice" type="number" min="0" step="any" placeholder="Price (฿)" required>
+          <button type="submit" class="btn btn-primary btn-sm">Save</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="cancelAddBtn">Cancel</button>
+        </form>
+        <div class="error-msg" id="addError"></div>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+  <script>
+    // MDR nav control
+    const mdrInput = document.getElementById('mdrInput');
+    mdrInput.value = (Storage.getMDR() * 100).toFixed(1);
+    mdrInput.addEventListener('change', () => {
+      const v = parseFloat(mdrInput.value);
+      if (!isNaN(v) && v >= 0 && v <= 100) Storage.setMDR(v / 100);
+      else mdrInput.value = (Storage.getMDR() * 100).toFixed(1);
+    });
+
+    const tbody = document.getElementById('ingBody');
+    const addForm = document.getElementById('addForm');
+    const addError = document.getElementById('addError');
+
+    document.getElementById('showAddBtn').onclick = () => { addForm.style.display = 'flex'; addError.textContent = ''; };
+    document.getElementById('cancelAddBtn').onclick = () => { addForm.style.display = 'none'; addForm.reset(); };
+
+    function renderIngredients() {
+      const list = Storage.getIngredients();
+      tbody.innerHTML = list.length === 0
+        ? '<tr><td colspan="6" style="color:#aaa;padding:16px">No ingredients yet.</td></tr>'
+        : list.map(ing => {
+            const cpu = costPerUnit(ing);
+            return `<tr data-id="${ing.id}">
+              <td>${ing.name}</td>
+              <td>${ing.bulkQty}</td>
+              <td>${ing.bulkUnit}</td>
+              <td class="text-right">${fmt(ing.bulkPrice)}</td>
+              <td class="text-right">${fmt(cpu)}</td>
+              <td class="text-right">
+                <button class="btn btn-ghost btn-sm" onclick="startEdit('${ing.id}')">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="doDelete('${ing.id}')">Delete</button>
+              </td>
+            </tr>`;
+          }).join('');
+    }
+
+    addForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(addForm));
+      if (!data.name.trim()) { addError.textContent = 'Name is required.'; return; }
+      Storage.saveIngredient({
+        id: crypto.randomUUID(),
+        name: data.name.trim(),
+        bulkQty: parseFloat(data.bulkQty),
+        bulkUnit: data.bulkUnit.trim(),
+        bulkPrice: parseFloat(data.bulkPrice),
+      });
+      addForm.reset(); addForm.style.display = 'none'; addError.textContent = '';
+      renderIngredients();
+    });
+
+    function startEdit(id) {
+      const ing = Storage.getIngredients().find(x => x.id === id);
+      if (!ing) return;
+      const row = tbody.querySelector(`tr[data-id="${id}"]`);
+      row.innerHTML = `
+        <td><input name="name" value="${ing.name}" style="width:120px"></td>
+        <td><input name="bulkQty" type="number" value="${ing.bulkQty}" min="0.001" step="any" style="width:70px"></td>
+        <td><input name="bulkUnit" value="${ing.bulkUnit}" style="width:60px"></td>
+        <td><input name="bulkPrice" type="number" value="${ing.bulkPrice}" min="0" step="any" style="width:80px"></td>
+        <td></td>
+        <td class="text-right">
+          <button class="btn btn-primary btn-sm" onclick="saveEdit('${id}', this)">Save</button>
+          <button class="btn btn-ghost btn-sm" onclick="renderIngredients()">Cancel</button>
+        </td>`;
+    }
+
+    function saveEdit(id, btn) {
+      const row = btn.closest('tr');
+      const get = n => row.querySelector(`[name="${n}"]`).value.trim();
+      Storage.saveIngredient({
+        id, name: get('name'), bulkUnit: get('bulkUnit'),
+        bulkQty: parseFloat(get('bulkQty')), bulkPrice: parseFloat(get('bulkPrice')),
+      });
+      renderIngredients();
+    }
+
+    function doDelete(id) {
+      const usedBy = Storage.ingredientUsedBy(id);
+      if (usedBy.length > 0) {
+        alert(`Cannot delete — used by: ${usedBy.join(', ')}`);
+        return;
+      }
+      if (confirm('Delete this ingredient?')) { Storage.deleteIngredient(id); renderIngredients(); }
+    }
+
+    renderIngredients();
+  </script>
+</body>
+</html>
