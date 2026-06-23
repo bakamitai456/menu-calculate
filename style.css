@@ -1,0 +1,115 @@
+/* style.css */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  background: #f5f5f5;
+  color: #222;
+}
+
+/* NAV */
+nav {
+  background: #1a1a2e;
+  color: #fff;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 52px;
+}
+nav .brand { font-weight: 700; font-size: 16px; margin-right: auto; }
+nav a { color: #ccc; text-decoration: none; font-size: 14px; }
+nav a:hover, nav a.active { color: #fff; }
+.mdr-control { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.mdr-control input {
+  width: 56px; padding: 2px 6px; border: 1px solid #555;
+  background: #2a2a4a; color: #fff; border-radius: 4px; text-align: right;
+}
+
+/* MAIN LAYOUT */
+main { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+section { background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); margin-bottom: 24px; padding: 20px; }
+section h2 { font-size: 16px; font-weight: 600; margin-bottom: 14px; color: #1a1a2e; }
+
+/* TABLES */
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid #eee; padding: 6px 8px; }
+td { padding: 8px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+td input[type="text"], td input[type="number"] {
+  width: 100%; padding: 4px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;
+}
+
+/* BUTTONS */
+.btn { padding: 6px 14px; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 500; }
+.btn-primary { background: #1a1a2e; color: #fff; }
+.btn-primary:hover { background: #2a2a5e; }
+.btn-sm { padding: 3px 8px; font-size: 12px; }
+.btn-danger { background: #e53e3e; color: #fff; }
+.btn-danger:hover { background: #c53030; }
+.btn-ghost { background: transparent; color: #555; border: 1px solid #ddd; }
+.btn-ghost:hover { background: #f5f5f5; }
+.btn-link { background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 12px; padding: 0; text-decoration: underline; }
+
+/* ADD ROW */
+.add-row { margin-top: 10px; }
+.add-row form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+.add-row form input { padding: 6px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+.add-row form input[name="name"] { width: 160px; }
+.add-row form input[name="bulkQty"], .add-row form input[name="bulkPrice"] { width: 90px; }
+.add-row form input[name="bulkUnit"] { width: 70px; }
+
+/* MENU CARDS */
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.menu-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 16px; }
+.menu-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; display: flex; justify-content: space-between; }
+.menu-card .card-actions { display: flex; gap: 6px; }
+.cost-table { width: 100%; font-size: 12px; margin-bottom: 10px; }
+.cost-table td { padding: 2px 4px; color: #555; }
+.cost-table td:last-child { text-align: right; }
+.cost-total { font-weight: 600; border-top: 1px solid #eee; color: #222; }
+.profit-table { width: 100%; font-size: 12px; border-top: 2px solid #eee; padding-top: 8px; margin-top: 4px; }
+.profit-table th { font-size: 11px; color: #aaa; text-transform: uppercase; padding: 3px 4px; }
+.profit-table td { padding: 3px 4px; }
+.profit-table td:not(:first-child) { text-align: right; }
+.profit-pos { color: #16a34a; font-weight: 600; }
+.profit-neg { color: #dc2626; font-weight: 600; }
+
+/* MODAL */
+.modal-backdrop {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.5); z-index: 100; align-items: center; justify-content: center;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: #fff; border-radius: 10px; padding: 24px;
+  width: 540px; max-width: 95vw; max-height: 90vh; overflow-y: auto;
+}
+.modal h2 { font-size: 16px; margin-bottom: 16px; }
+.modal label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; margin-top: 12px; }
+.modal input[type="text"], .modal input[type="number"], .modal select {
+  width: 100%; padding: 7px 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 13px;
+}
+.row-list { margin-top: 8px; }
+.row-item { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; font-size: 13px; }
+.row-item select { flex: 1; }
+.row-item input[type="number"] { width: 80px; }
+.row-item .unit-label { color: #888; min-width: 28px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+.preview-box { background: #f8f8f8; border-radius: 6px; padding: 10px 14px; margin-top: 14px; font-size: 13px; }
+.preview-box h4 { font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 6px; }
+
+/* QUICK-ADD INLINE */
+.quick-add-form { background: #f0f4ff; border-radius: 6px; padding: 10px; margin-top: 8px; font-size: 13px; }
+.quick-add-form .form-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.quick-add-form input { padding: 5px 8px; border: 1px solid #c5d0f5; border-radius: 4px; font-size: 13px; }
+.quick-add-form input[name="name"] { width: 140px; }
+.quick-add-form input[name="bulkQty"], .quick-add-form input[name="bulkPrice"] { width: 80px; }
+.quick-add-form input[name="bulkUnit"] { width: 60px; }
+
+/* UTILITY */
+.text-right { text-align: right; }
+.text-sm { font-size: 12px; color: #888; }
+.mt-2 { margin-top: 8px; }
+.error-msg { color: #dc2626; font-size: 12px; margin-top: 4px; }
