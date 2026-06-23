@@ -42,6 +42,11 @@
   </main>
   <script src="app.js"></script>
   <script>
+    // HTML escape helper to prevent XSS
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
     // MDR nav control
     const mdrInput = document.getElementById('mdrInput');
     mdrInput.value = (Storage.getMDR() * 100).toFixed(1);
@@ -65,9 +70,9 @@
         : list.map(ing => {
             const cpu = costPerUnit(ing);
             return `<tr data-id="${ing.id}">
-              <td>${ing.name}</td>
+              <td>${esc(ing.name)}</td>
               <td>${ing.bulkQty}</td>
-              <td>${ing.bulkUnit}</td>
+              <td>${esc(ing.bulkUnit)}</td>
               <td class="text-right">${fmt(ing.bulkPrice)}</td>
               <td class="text-right">${fmt(cpu)}</td>
               <td class="text-right">
@@ -98,9 +103,9 @@
       if (!ing) return;
       const row = tbody.querySelector(`tr[data-id="${id}"]`);
       row.innerHTML = `
-        <td><input name="name" value="${ing.name}" style="width:120px"></td>
+        <td><input name="name" value="${esc(ing.name)}" style="width:120px"></td>
         <td><input name="bulkQty" type="number" value="${ing.bulkQty}" min="0.001" step="any" style="width:70px"></td>
-        <td><input name="bulkUnit" value="${ing.bulkUnit}" style="width:60px"></td>
+        <td><input name="bulkUnit" value="${esc(ing.bulkUnit)}" style="width:60px"></td>
         <td><input name="bulkPrice" type="number" value="${ing.bulkPrice}" min="0" step="any" style="width:80px"></td>
         <td></td>
         <td class="text-right">
