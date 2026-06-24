@@ -113,3 +113,82 @@ td input[type="text"], td input[type="number"] {
 .text-sm { font-size: 12px; color: #888; }
 .mt-2 { margin-top: 8px; }
 .error-msg { color: #dc2626; font-size: 12px; margin-top: 4px; }
+
+/* SYNC CONTROLS */
+nav { flex-wrap: wrap; height: auto; min-height: 52px; padding: 8px 24px; }
+.sync-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sync-control input[type="url"] {
+  width: 210px;
+  padding: 3px 8px;
+  border: 1px solid #555;
+  background: #2a2a4a;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.sync-control input[type="url"]::placeholder { color: #888; }
+
+.sync-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #ccc;
+  white-space: nowrap;
+}
+.sync-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #555;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.sync-status[data-status="idle"]     .sync-dot { background: #16a34a; }
+.sync-status[data-status="syncing"]  .sync-dot { background: #f59e0b; animation: syncPulse 1s infinite; }
+.sync-status[data-status="conflict"] .sync-dot { background: #dc2626; }
+.sync-status[data-status="error"]    .sync-dot { background: #dc2626; }
+.sync-status[data-status="idle"]     .sync-status-text { color: #86efac; }
+.sync-status[data-status="syncing"]  .sync-status-text { color: #fcd34d; }
+.sync-status[data-status="conflict"] .sync-status-text { color: #f87171; }
+.sync-status[data-status="error"]    .sync-status-text { color: #f87171; }
+
+@keyframes syncPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* CONFLICT MODAL */
+.conflict-modal { width: 680px; }
+.conflict-subtitle { color: #666; font-size: 13px; margin-bottom: 8px; }
+.conflict-counter { font-size: 12px; color: #888; margin-bottom: 14px; }
+.conflict-sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.conflict-side-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 6px;
+  letter-spacing: 0.4px;
+}
+.conflict-data {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 80px;
+  color: #333;
+}

@@ -4,6 +4,9 @@ const KEYS = {
   fixedCosts: 'mc_fixed_cost_items',
   menus: 'mc_menus',
   mdr: 'mc_mdr',
+  syncUrl:    'mc_sync_url',
+  lastSyncAt: 'mc_last_sync_at',
+  tombstones: 'mc_tombstones',
 };
 
 const Storage = {
@@ -24,16 +27,20 @@ const Storage = {
   _saveList(key, list) {
     localStorage.setItem(key, JSON.stringify(list));
   },
+  _now() { return new Date().toISOString(); },
+  _touch(item) { return { ...item, updatedAt: this._now() }; },
 
   // --- Ingredients ---
   getIngredients() { return this._getList(KEYS.ingredients); },
   saveIngredient(item) {
     const list = this.getIngredients();
     const idx = list.findIndex(x => x.id === item.id);
-    if (idx >= 0) list[idx] = item; else list.push(item);
+    const stamped = this._touch(item);
+    if (idx >= 0) list[idx] = stamped; else list.push(stamped);
     this._saveList(KEYS.ingredients, list);
   },
   deleteIngredient(id) {
+    this._addTombstone(id, 'ingredient');
     this._saveList(KEYS.ingredients, this.getIngredients().filter(x => x.id !== id));
   },
 
@@ -42,10 +49,12 @@ const Storage = {
   saveFixedCost(item) {
     const list = this.getFixedCosts();
     const idx = list.findIndex(x => x.id === item.id);
-    if (idx >= 0) list[idx] = item; else list.push(item);
+    const stamped = this._touch(item);
+    if (idx >= 0) list[idx] = stamped; else list.push(stamped);
     this._saveList(KEYS.fixedCosts, list);
   },
   deleteFixedCost(id) {
+    this._addTombstone(id, 'fixedCost');
     this._saveList(KEYS.fixedCosts, this.getFixedCosts().filter(x => x.id !== id));
   },
 
@@ -54,12 +63,30 @@ const Storage = {
   saveMenu(menu) {
     const list = this.getMenus();
     const idx = list.findIndex(x => x.id === menu.id);
-    if (idx >= 0) list[idx] = menu; else list.push(menu);
+    const stamped = this._touch(menu);
+    if (idx >= 0) list[idx] = stamped; else list.push(stamped);
     this._saveList(KEYS.menus, list);
   },
   deleteMenu(id) {
+    this._addTombstone(id, 'menu');
     this._saveList(KEYS.menus, this.getMenus().filter(x => x.id !== id));
   },
+
+  // --- Tombstones ---
+  getTombstones() { return this._getList(KEYS.tombstones); },
+  _addTombstone(id, type) {
+    const stones = this.getTombstones();
+    const idx = stones.findIndex(s => s.id === id);
+    const stone = { id, type, deletedAt: this._now() };
+    if (idx >= 0) stones[idx] = stone; else stones.push(stone);
+    this._saveList(KEYS.tombstones, stones);
+  },
+
+  // --- Sync accessors ---
+  getSyncUrl()      { return localStorage.getItem(KEYS.syncUrl) || ''; },
+  setSyncUrl(url)   { localStorage.setItem(KEYS.syncUrl, url.trim()); },
+  getLastSyncAt()   { return localStorage.getItem(KEYS.lastSyncAt) || '1970-01-01T00:00:00.000Z'; },
+  setLastSyncAt(ts) { localStorage.setItem(KEYS.lastSyncAt, ts); },
 
   // --- Usage guards ---
   ingredientUsedBy(id) {

@@ -16,6 +16,14 @@
     <div class="mdr-control">
       MDR <input type="number" id="mdrInput" min="0" max="100" step="0.1"> %
     </div>
+    <div class="sync-control">
+      <input type="url" id="syncUrlInput" placeholder="Apps Script URL" title="Paste your Google Apps Script Web App URL here">
+      <button class="btn btn-ghost btn-sm" id="syncNowBtn">Sync Now</button>
+      <div class="sync-status" id="syncStatus" data-status="idle">
+        <span class="sync-dot"></span>
+        <span class="sync-status-text">Idle</span>
+      </div>
+    </div>
   </nav>
   <main>
     <!-- FIXED COSTS SECTION -->
@@ -103,7 +111,31 @@
     </div>
   </div>
 
+  <!-- CONFLICT MODAL -->
+  <div class="modal-backdrop" id="conflictModal">
+    <div class="modal conflict-modal">
+      <h2>Sync Conflict</h2>
+      <p class="conflict-subtitle">This item was changed on both devices since the last sync.</p>
+      <div class="conflict-counter" id="conflictCounter"></div>
+      <div class="conflict-sides">
+        <div class="conflict-side">
+          <div class="conflict-side-label">Local (this device)</div>
+          <pre id="conflictLocal" class="conflict-data"></pre>
+        </div>
+        <div class="conflict-side">
+          <div class="conflict-side-label">Remote (Google Sheet)</div>
+          <pre id="conflictRemote" class="conflict-data"></pre>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="conflictKeepLocal">Keep Local</button>
+        <button class="btn btn-primary" id="conflictKeepRemote">Keep Remote</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
+  <script src="sync.js"></script>
   <script>
     // --- MDR ---
     const mdrInput = document.getElementById('mdrInput');
@@ -442,6 +474,19 @@
       modal.classList.remove('open');
       renderMenus();
     };
+
+    // --- Sync ---
+    window._syncRefresh = function() { renderFC(); renderMenus(); };
+
+    const syncUrlInput = document.getElementById('syncUrlInput');
+    syncUrlInput.value = Storage.getSyncUrl();
+    syncUrlInput.addEventListener('change', () => {
+      const url = syncUrlInput.value.trim();
+      Storage.setSyncUrl(url);
+      url ? SyncEngine.start() : SyncEngine.stop();
+    });
+    document.getElementById('syncNowBtn').onclick = () => SyncEngine.syncOnce();
+    if (Storage.getSyncUrl()) SyncEngine.start();
 
     // Init
     renderFC();
