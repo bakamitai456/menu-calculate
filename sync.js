@@ -76,13 +76,14 @@ const SyncEngine = {
   },
 
   async _pushRemote(url, payload) {
-    // Apps Script executes doPost server-side before redirecting to echo.
-    // mode:'no-cors' sends the body without needing CORS headers on the response
-    // (opaque response is fine — write success is confirmed on the next read).
+    // Apps Script runs doPost server-side before issuing the 302 redirect to echo.
+    // redirect:'manual' stops the browser from following the redirect, eliminating
+    // the cross-origin echo request that causes CORS errors on GitHub Pages.
     await fetch(url, {
       method: 'POST',
       body: JSON.stringify(payload),
       mode: 'no-cors',
+      redirect: 'manual',
     });
   },
 
