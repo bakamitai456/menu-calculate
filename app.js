@@ -113,3 +113,58 @@ function validateItem(data) {
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
+function exportData() {
+  const date = new Date().toISOString().slice(0, 10);
+  const payload = JSON.stringify({
+    version: 1,
+    ingredients: Storage.getIngredients(),
+    fixedCostItems: Storage.getFixedCosts(),
+    menus: Storage.getMenus(),
+    mdr: Storage.getMDR(),
+  }, null, 2);
+  const blob = new Blob([payload], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `menu-calculator-backup-${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = () => {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      let data;
+      try {
+        data = JSON.parse(e.target.result);
+      } catch {
+        alert('Invalid file — could not read JSON.');
+        return;
+      }
+      if (
+        !Array.isArray(data.ingredients) ||
+        !Array.isArray(data.fixedCostItems) ||
+        !Array.isArray(data.menus) ||
+        typeof data.mdr !== 'number'
+      ) {
+        alert('Invalid backup file — missing required fields.');
+        return;
+      }
+      if (!confirm('This will replace all current data. Continue?')) return;
+      localStorage.setItem('mc_ingredients', JSON.stringify(data.ingredients));
+      localStorage.setItem('mc_fixed_cost_items', JSON.stringify(data.fixedCostItems));
+      localStorage.setItem('mc_menus', JSON.stringify(data.menus));
+      localStorage.setItem('mc_mdr', data.mdr);
+      location.reload();
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
