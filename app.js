@@ -152,16 +152,21 @@ function importData() {
         !Array.isArray(data.ingredients) ||
         !Array.isArray(data.fixedCostItems) ||
         !Array.isArray(data.menus) ||
-        typeof data.mdr !== 'number'
+        typeof data.mdr !== 'number' ||
+        !isFinite(data.mdr)
       ) {
         alert('Invalid backup file — missing required fields.');
         return;
       }
+      if (data.version !== 1) {
+        alert('Unsupported backup version.');
+        return;
+      }
       if (!confirm('This will replace all current data. Continue?')) return;
-      localStorage.setItem('mc_ingredients', JSON.stringify(data.ingredients));
-      localStorage.setItem('mc_fixed_cost_items', JSON.stringify(data.fixedCostItems));
-      localStorage.setItem('mc_menus', JSON.stringify(data.menus));
-      localStorage.setItem('mc_mdr', data.mdr);
+      localStorage.setItem(KEYS.ingredients, JSON.stringify(data.ingredients));
+      localStorage.setItem(KEYS.fixedCosts, JSON.stringify(data.fixedCostItems));
+      localStorage.setItem(KEYS.menus, JSON.stringify(data.menus));
+      localStorage.setItem(KEYS.mdr, data.mdr);
       location.reload();
     };
     reader.readAsText(file);
