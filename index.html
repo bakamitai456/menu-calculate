@@ -103,11 +103,6 @@
 
   <script src="app.js"></script>
   <script>
-    // HTML escape helper to prevent XSS
-    function esc(s) {
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-
     // --- MDR ---
     const mdrInput = document.getElementById('mdrInput');
     mdrInput.value = (Storage.getMDR() * 100).toFixed(1);
@@ -135,6 +130,7 @@
         bulkQty: parseFloat(data.bulkQty), bulkUnit: data.bulkUnit.trim(), bulkPrice: parseFloat(data.bulkPrice),
       });
       e.target.reset(); e.target.style.display = 'none';
+      document.getElementById('fcError').textContent = '';
       renderFC(); renderMenus();
     });
 
@@ -175,7 +171,10 @@
     function saveFcEdit(id, btn) {
       const row = btn.closest('tr');
       const get = n => row.querySelector(`[name="${n}"]`).value.trim();
-      Storage.saveFixedCost({ id, name: get('name'), bulkUnit: get('bulkUnit'), bulkQty: parseFloat(get('bulkQty')), bulkPrice: parseFloat(get('bulkPrice')) });
+      const data = { name: get('name'), bulkUnit: get('bulkUnit'), bulkQty: parseFloat(get('bulkQty')), bulkPrice: parseFloat(get('bulkPrice')) };
+      const err = validateItem(data);
+      if (err) { alert(err); return; }
+      Storage.saveFixedCost({ id, name: data.name, bulkUnit: data.bulkUnit, bulkQty: data.bulkQty, bulkPrice: data.bulkPrice });
       renderFC(); renderMenus();
     }
 
@@ -266,11 +265,14 @@
       const div = document.createElement('div');
       div.className = 'row-item';
       div.innerHTML = `
-        <select class="ing-select" onchange="updateUnit(this)">${opts}</select>
+        <select class="ing-select">${opts}</select>
         <input type="number" class="ing-qty" value="${qty}" min="0.001" step="any" placeholder="Qty">
         <span class="unit-label">${esc(unit)}</span>
         <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.row-item').remove(); updatePreview()">✕</button>`;
-      div.querySelector('.ing-select').addEventListener('change', updatePreview);
+      div.querySelector('.ing-select').addEventListener('change', function() {
+        updateUnit(this);
+        updatePreview();
+      });
       div.querySelector('.ing-qty').addEventListener('input', updatePreview);
       return div;
     }
@@ -327,16 +329,14 @@
     document.getElementById('saveQuickIngBtn').onclick = () => {
       const form = document.getElementById('quickAddForm');
       const get = n => form.querySelector(`[name="${n}"]`).value.trim();
-      if (!get('name')) { document.getElementById('quickIngError').textContent = 'Name required.'; return; }
-      const newIng = {
-        id: crypto.randomUUID(), name: get('name'), bulkUnit: get('bulkUnit'),
-        bulkQty: parseFloat(get('bulkQty')), bulkPrice: parseFloat(get('bulkPrice')),
-      };
+      const data = { name: get('name'), bulkQty: parseFloat(get('bulkQty')), bulkUnit: get('bulkUnit'), bulkPrice: parseFloat(get('bulkPrice')) };
+      const err = validateItem(data);
+      if (err) { document.getElementById('quickIngError').textContent = err; return; }
+      const newIng = { id: crypto.randomUUID(), name: data.name, bulkUnit: data.bulkUnit, bulkQty: data.bulkQty, bulkPrice: data.bulkPrice };
       Storage.saveIngredient(newIng);
       form.querySelectorAll('input').forEach(i => i.value = '');
       form.style.display = 'none';
       document.getElementById('quickIngError').textContent = '';
-      // Auto-add a row pre-selected to the new ingredient
       ingRows.appendChild(buildIngRow(newIng.id, ''));
       updatePreview();
     };
@@ -385,6 +385,7 @@
       document.getElementById('deliveryPrice').value = '';
       document.getElementById('menuError').textContent = '';
       document.getElementById('quickAddForm').style.display = 'none';
+      document.getElementById('quickIngError').textContent = '';
       document.getElementById('previewContent').innerHTML = '<span style="color:#aaa;font-size:12px">Fill in ingredients and prices to see profit.</span>';
       modal.classList.add('open');
     }

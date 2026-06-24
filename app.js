@@ -100,5 +100,16 @@ function calcMenu(menu) {
   return { ingredientCost, fixedCost, totalCost, frontProfit, frontMargin, deliveryNet, deliveryProfit, deliveryMargin };
 }
 
-function fmt(n) { return n.toFixed(2); }
+function fmt(n) { return isNaN(n) ? '—' : n.toFixed(2); }
 function fmtPct(n) { return n.toFixed(1) + '%'; }
+
+function validateItem(data) {
+  if (!data.name || !data.name.trim()) return 'Name is required.';
+  if (isNaN(data.bulkQty) || data.bulkQty <= 0) return 'Qty must be a positive number.';
+  if (isNaN(data.bulkPrice) || data.bulkPrice < 0) return 'Price must be a non-negative number.';
+  return null;
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}

@@ -42,11 +42,6 @@
   </main>
   <script src="app.js"></script>
   <script>
-    // HTML escape helper to prevent XSS
-    function esc(s) {
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-
     // MDR nav control
     const mdrInput = document.getElementById('mdrInput');
     mdrInput.value = (Storage.getMDR() * 100).toFixed(1);
@@ -76,8 +71,8 @@
               <td class="text-right">${fmt(ing.bulkPrice)}</td>
               <td class="text-right">${fmt(cpu)}</td>
               <td class="text-right">
-                <button class="btn btn-ghost btn-sm" onclick="startEdit('${ing.id}')">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="doDelete('${ing.id}')">Delete</button>
+                <button class="btn btn-ghost btn-sm" onclick="startEdit('${esc(ing.id)}')">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="doDelete('${esc(ing.id)}')">Delete</button>
               </td>
             </tr>`;
           }).join('');
@@ -117,10 +112,10 @@
     function saveEdit(id, btn) {
       const row = btn.closest('tr');
       const get = n => row.querySelector(`[name="${n}"]`).value.trim();
-      Storage.saveIngredient({
-        id, name: get('name'), bulkUnit: get('bulkUnit'),
-        bulkQty: parseFloat(get('bulkQty')), bulkPrice: parseFloat(get('bulkPrice')),
-      });
+      const data = { name: get('name'), bulkUnit: get('bulkUnit'), bulkQty: parseFloat(get('bulkQty')), bulkPrice: parseFloat(get('bulkPrice')) };
+      const err = validateItem(data);
+      if (err) { alert(err); return; }
+      Storage.saveIngredient({ id, name: data.name, bulkUnit: data.bulkUnit, bulkQty: data.bulkQty, bulkPrice: data.bulkPrice });
       renderIngredients();
     }
 
