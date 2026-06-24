@@ -124,10 +124,17 @@
     document.getElementById('fcAddForm').addEventListener('submit', e => {
       e.preventDefault();
       const data = Object.fromEntries(new FormData(e.target));
-      if (!data.name.trim()) { document.getElementById('fcError').textContent = 'Name required.'; return; }
+      const itemData = {
+        name: data.name.trim(),
+        bulkQty: parseFloat(data.bulkQty),
+        bulkUnit: data.bulkUnit.trim(),
+        bulkPrice: parseFloat(data.bulkPrice),
+      };
+      const err = validateItem(itemData);
+      if (err) { document.getElementById('fcError').textContent = err; return; }
       Storage.saveFixedCost({
-        id: crypto.randomUUID(), name: data.name.trim(),
-        bulkQty: parseFloat(data.bulkQty), bulkUnit: data.bulkUnit.trim(), bulkPrice: parseFloat(data.bulkPrice),
+        id: crypto.randomUUID(), name: itemData.name,
+        bulkQty: itemData.bulkQty, bulkUnit: itemData.bulkUnit, bulkPrice: itemData.bulkPrice,
       });
       e.target.reset(); e.target.style.display = 'none';
       document.getElementById('fcError').textContent = '';

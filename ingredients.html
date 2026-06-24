@@ -81,13 +81,20 @@
     addForm.addEventListener('submit', e => {
       e.preventDefault();
       const data = Object.fromEntries(new FormData(addForm));
-      if (!data.name.trim()) { addError.textContent = 'Name is required.'; return; }
-      Storage.saveIngredient({
-        id: crypto.randomUUID(),
+      const itemData = {
         name: data.name.trim(),
         bulkQty: parseFloat(data.bulkQty),
         bulkUnit: data.bulkUnit.trim(),
         bulkPrice: parseFloat(data.bulkPrice),
+      };
+      const err = validateItem(itemData);
+      if (err) { addError.textContent = err; return; }
+      Storage.saveIngredient({
+        id: crypto.randomUUID(),
+        name: itemData.name,
+        bulkQty: itemData.bulkQty,
+        bulkUnit: itemData.bulkUnit,
+        bulkPrice: itemData.bulkPrice,
       });
       addForm.reset(); addForm.style.display = 'none'; addError.textContent = '';
       renderIngredients();
