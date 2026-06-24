@@ -76,11 +76,14 @@ const SyncEngine = {
   },
 
   async _pushRemote(url, payload) {
-    // Apps Script 302-redirects all requests; browsers convert POST→GET on redirect,
-    // so doPost never receives the body. Use GET + query param instead.
-    const data = encodeURIComponent(JSON.stringify(payload));
-    const resp = await fetch(`${url}?action=write&data=${data}`, { cache: 'no-store' });
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    // Apps Script executes doPost server-side before redirecting to echo.
+    // mode:'no-cors' sends the body without needing CORS headers on the response
+    // (opaque response is fine — write success is confirmed on the next read).
+    await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      mode: 'no-cors',
+    });
   },
 
   _buildLocalPayload() {
