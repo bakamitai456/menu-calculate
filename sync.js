@@ -3,19 +3,26 @@ const EPOCH = '1970-01-01T00:00:00.000Z';
 
 const SyncEngine = {
   _timer: null,
-  _interval: 10_000,
   _syncing: false,
   _conflictPending: false,
 
   start() {
     if (this._timer) return;
     this.syncOnce();
-    this._timer = setInterval(() => this.syncOnce(), this._interval);
+    this._timer = setInterval(() => this.syncOnce(), Storage.getSyncInterval() * 1000);
   },
 
   stop() {
     clearInterval(this._timer);
     this._timer = null;
+  },
+
+  setIntervalSeconds(seconds) {
+    Storage.setSyncInterval(seconds);
+    if (this._timer) {
+      clearInterval(this._timer);
+      this._timer = setInterval(() => this.syncOnce(), Storage.getSyncInterval() * 1000);
+    }
   },
 
   async syncOnce() {

@@ -131,6 +131,24 @@ nav { flex-wrap: wrap; height: auto; min-height: 52px; padding: 8px 24px; }
   font-size: 12px;
 }
 .sync-control input[type="url"]::placeholder { color: #888; }
+.sync-rate-control {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #ccc;
+  white-space: nowrap;
+}
+.sync-rate-control input[type="number"] {
+  width: 48px;
+  padding: 3px 6px;
+  border: 1px solid #555;
+  background: #2a2a4a;
+  color: #fff;
+  border-radius: 4px;
+  text-align: right;
+  font-size: 12px;
+}
 
 .sync-status {
   display: flex;

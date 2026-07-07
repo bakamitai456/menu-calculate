@@ -5,6 +5,7 @@ const KEYS = {
   menus: 'mc_menus',
   mdr: 'mc_mdr',
   syncUrl:    'mc_sync_url',
+  syncInterval: 'mc_sync_interval',
   lastSyncAt: 'mc_last_sync_at',
   tombstones: 'mc_tombstones',
 };
@@ -85,6 +86,13 @@ const Storage = {
   // --- Sync accessors ---
   getSyncUrl()      { return localStorage.getItem(KEYS.syncUrl) || ''; },
   setSyncUrl(url)   { localStorage.setItem(KEYS.syncUrl, url.trim()); },
+  getSyncInterval() {
+    const v = parseInt(localStorage.getItem(KEYS.syncInterval), 10);
+    return Number.isFinite(v) && v >= 3 ? v : 30;
+  },
+  setSyncInterval(seconds) {
+    localStorage.setItem(KEYS.syncInterval, Math.max(3, Math.round(seconds)));
+  },
   getLastSyncAt()   { return localStorage.getItem(KEYS.lastSyncAt) || '1970-01-01T00:00:00.000Z'; },
   setLastSyncAt(ts) { localStorage.setItem(KEYS.lastSyncAt, ts); },
 

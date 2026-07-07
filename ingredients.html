@@ -18,6 +18,9 @@
     </div>
     <div class="sync-control">
       <input type="url" id="syncUrlInput" placeholder="Apps Script URL" title="Paste your Google Apps Script Web App URL here">
+      <div class="sync-rate-control" title="How often to sync with Google Sheets">
+        <input type="number" id="syncIntervalInput" min="3" step="1"> s
+      </div>
       <button class="btn btn-ghost btn-sm" id="syncNowBtn">Sync Now</button>
       <div class="sync-status" id="syncStatus" data-status="idle">
         <span class="sync-dot"></span>
@@ -181,6 +184,15 @@
     });
     document.getElementById('syncNowBtn').onclick = () => SyncEngine.syncOnce();
     if (Storage.getSyncUrl()) SyncEngine.start();
+
+    const syncIntervalInput = document.getElementById('syncIntervalInput');
+    syncIntervalInput.value = Storage.getSyncInterval();
+    syncIntervalInput.addEventListener('change', () => {
+      const seconds = parseInt(syncIntervalInput.value, 10);
+      if (!Number.isFinite(seconds)) return;
+      SyncEngine.setIntervalSeconds(seconds);
+      syncIntervalInput.value = Storage.getSyncInterval();
+    });
 
     renderIngredients();
   </script>
