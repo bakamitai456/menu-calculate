@@ -11,8 +11,8 @@
     <span class="brand">Menu Calculator</span>
     <a href="index.html">Dashboard</a>
     <a href="ingredients.html" class="active">Ingredients</a>
-    <button class="btn btn-ghost btn-sm" onclick="exportData()">Export</button>
-    <button class="btn btn-ghost btn-sm" onclick="importData()">Import</button>
+    <button class="btn btn-ghost btn-sm" id="exportBtn">Export</button>
+    <button class="btn btn-ghost btn-sm" id="importBtn">Import</button>
     <div class="mdr-control">
       MDR <input type="number" id="mdrInput" min="0" max="100" step="0.1"> %
     </div>
@@ -76,125 +76,6 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
-  <script src="sync.js"></script>
-  <script>
-    // MDR nav control
-    const mdrInput = document.getElementById('mdrInput');
-    mdrInput.value = (Storage.getMDR() * 100).toFixed(1);
-    mdrInput.addEventListener('change', () => {
-      const v = parseFloat(mdrInput.value);
-      if (!isNaN(v) && v >= 0 && v <= 100) Storage.setMDR(v / 100);
-      else mdrInput.value = (Storage.getMDR() * 100).toFixed(1);
-    });
-
-    const tbody = document.getElementById('ingBody');
-    const addForm = document.getElementById('addForm');
-    const addError = document.getElementById('addError');
-
-    document.getElementById('showAddBtn').onclick = () => { addForm.style.display = 'flex'; addError.textContent = ''; };
-    document.getElementById('cancelAddBtn').onclick = () => { addForm.style.display = 'none'; addForm.reset(); };
-
-    function renderIngredients() {
-      const list = Storage.getIngredients();
-      tbody.innerHTML = list.length === 0
-        ? '<tr><td colspan="6" style="color:#aaa;padding:16px">No ingredients yet.</td></tr>'
-        : list.map(ing => {
-            const cpu = costPerUnit(ing);
-            return `<tr data-id="${ing.id}">
-              <td>${esc(ing.name)}</td>
-              <td>${ing.bulkQty}</td>
-              <td>${esc(ing.bulkUnit)}</td>
-              <td class="text-right">${fmt(ing.bulkPrice)}</td>
-              <td class="text-right">${fmt(cpu)}</td>
-              <td class="text-right">
-                <button class="btn btn-ghost btn-sm" onclick="startEdit('${esc(ing.id)}')">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="doDelete('${esc(ing.id)}')">Delete</button>
-              </td>
-            </tr>`;
-          }).join('');
-    }
-
-    addForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(addForm));
-      const itemData = {
-        name: data.name.trim(),
-        bulkQty: parseFloat(data.bulkQty),
-        bulkUnit: data.bulkUnit.trim(),
-        bulkPrice: parseFloat(data.bulkPrice),
-      };
-      const err = validateItem(itemData);
-      if (err) { addError.textContent = err; return; }
-      Storage.saveIngredient({
-        id: crypto.randomUUID(),
-        name: itemData.name,
-        bulkQty: itemData.bulkQty,
-        bulkUnit: itemData.bulkUnit,
-        bulkPrice: itemData.bulkPrice,
-      });
-      addForm.reset(); addForm.style.display = 'none'; addError.textContent = '';
-      renderIngredients();
-    });
-
-    function startEdit(id) {
-      const ing = Storage.getIngredients().find(x => x.id === id);
-      if (!ing) return;
-      const row = tbody.querySelector(`tr[data-id="${id}"]`);
-      row.innerHTML = `
-        <td><input name="name" value="${esc(ing.name)}" style="width:120px"></td>
-        <td><input name="bulkQty" type="number" value="${ing.bulkQty}" min="0.001" step="any" style="width:70px"></td>
-        <td><input name="bulkUnit" value="${esc(ing.bulkUnit)}" style="width:60px"></td>
-        <td><input name="bulkPrice" type="number" value="${ing.bulkPrice}" min="0" step="any" style="width:80px"></td>
-        <td></td>
-        <td class="text-right">
-          <button class="btn btn-primary btn-sm" onclick="saveEdit('${id}', this)">Save</button>
-          <button class="btn btn-ghost btn-sm" onclick="renderIngredients()">Cancel</button>
-        </td>`;
-    }
-
-    function saveEdit(id, btn) {
-      const row = btn.closest('tr');
-      const get = n => row.querySelector(`[name="${n}"]`).value.trim();
-      const data = { name: get('name'), bulkUnit: get('bulkUnit'), bulkQty: parseFloat(get('bulkQty')), bulkPrice: parseFloat(get('bulkPrice')) };
-      const err = validateItem(data);
-      if (err) { alert(err); return; }
-      Storage.saveIngredient({ id, name: data.name, bulkUnit: data.bulkUnit, bulkQty: data.bulkQty, bulkPrice: data.bulkPrice });
-      renderIngredients();
-    }
-
-    function doDelete(id) {
-      const usedBy = Storage.ingredientUsedBy(id);
-      if (usedBy.length > 0) {
-        alert(`Cannot delete — used by: ${usedBy.join(', ')}`);
-        return;
-      }
-      if (confirm('Delete this ingredient?')) { Storage.deleteIngredient(id); renderIngredients(); }
-    }
-
-    // --- Sync ---
-    window._syncRefresh = function() { renderIngredients(); };
-
-    const syncUrlInput = document.getElementById('syncUrlInput');
-    syncUrlInput.value = Storage.getSyncUrl();
-    syncUrlInput.addEventListener('change', () => {
-      const url = syncUrlInput.value.trim();
-      Storage.setSyncUrl(url);
-      url ? SyncEngine.start() : SyncEngine.stop();
-    });
-    document.getElementById('syncNowBtn').onclick = () => SyncEngine.syncOnce();
-    if (Storage.getSyncUrl()) SyncEngine.start();
-
-    const syncIntervalInput = document.getElementById('syncIntervalInput');
-    syncIntervalInput.value = Storage.getSyncInterval();
-    syncIntervalInput.addEventListener('change', () => {
-      const seconds = parseInt(syncIntervalInput.value, 10);
-      if (!Number.isFinite(seconds)) return;
-      SyncEngine.setIntervalSeconds(seconds);
-      syncIntervalInput.value = Storage.getSyncInterval();
-    });
-
-    renderIngredients();
-  </script>
+  <script type="module" src="src/pages/ingredients.js"></script>
 </body>
 </html>
