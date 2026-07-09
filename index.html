@@ -35,7 +35,7 @@
       <table id="fcTable">
         <thead>
           <tr>
-            <th>Name</th><th>Bulk Qty</th><th>Unit</th><th>Bulk Price (฿)</th><th>Cost / Unit (฿)</th><th></th>
+            <th>Name</th><th>Bulk Qty</th><th>Unit</th><th>Bulk Price (฿)</th><th>Cost / Unit (฿)</th><th>Auto-Add Qty</th><th></th>
           </tr>
         </thead>
         <tbody id="fcBody"></tbody>
@@ -133,6 +133,24 @@
       <div class="modal-actions">
         <button class="btn btn-ghost" id="conflictKeepLocal">Keep Local</button>
         <button class="btn btn-primary" id="conflictKeepRemote">Keep Remote</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BULK UPDATE OVERLAY -->
+  <div class="modal-backdrop" id="bulkOverlay">
+    <div class="modal" style="text-align:center">
+      <p style="margin:0">Updating menus…</p>
+    </div>
+  </div>
+
+  <!-- BULK ACTION CONFIRM MODAL -->
+  <div class="modal-backdrop" id="bulkConfirmModal">
+    <div class="modal" style="text-align:center">
+      <p id="bulkConfirmMessage"></p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="bulkConfirmCancel">Cancel</button>
+        <button class="btn btn-primary" id="bulkConfirmOk">Confirm</button>
       </div>
     </div>
   </div>

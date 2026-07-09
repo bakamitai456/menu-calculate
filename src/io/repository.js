@@ -53,6 +53,9 @@ export function deleteMenu(id, now = nowISO()) {
   saveTombstone(id, 'menu', now);
   storage.saveList(KEYS.menus, removeById(getMenus(), id));
 }
+export function saveMenus(list) {
+  storage.saveList(KEYS.menus, list);
+}
 
 // --- Tombstones ---
 export function getTombstones() {
