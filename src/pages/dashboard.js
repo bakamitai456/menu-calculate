@@ -161,13 +161,14 @@ fcBody.addEventListener('click', e => {
 
 // === MENU CARDS ===
 const menuGrid = document.getElementById('menuGrid');
+const expandedMenuIds = new Set();
 
 function renderMenus() {
   menuGrid.innerHTML = renderMenuGrid(repo.getMenus(), {
     ingredients: repo.getIngredients(),
     fixedCosts: repo.getFixedCosts(),
     mdr: repo.getMDR(),
-  });
+  }, expandedMenuIds);
 }
 
 function doDeleteMenu(id) {
@@ -180,6 +181,10 @@ menuGrid.addEventListener('click', e => {
   const { action, id } = btn.dataset;
   if (action === 'edit') openEditMenu(id);
   else if (action === 'delete') doDeleteMenu(id);
+  else if (action === 'toggle-details') {
+    if (expandedMenuIds.has(id)) expandedMenuIds.delete(id); else expandedMenuIds.add(id);
+    renderMenus();
+  }
 });
 
 // === MENU MODAL ===

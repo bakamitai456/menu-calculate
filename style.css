@@ -98,20 +98,23 @@ input:focus, select:focus, button:focus { outline: 2px solid var(--accent); outl
 .add-row-card input[name="bulkUnit"] { width: 70px; }
 
 /* MENU CARDS */
-.menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
-.menu-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 16px; }
-.menu-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; display: flex; justify-content: space-between; }
-.menu-card .card-actions { display: flex; gap: 6px; }
-.cost-table { width: 100%; font-size: 12px; margin-bottom: 10px; }
-.cost-table td { padding: 2px 4px; color: #555; }
-.cost-table td:last-child { text-align: right; }
-.cost-total { font-weight: 600; border-top: 1px solid #eee; color: #222; }
-.profit-table { width: 100%; font-size: 12px; border-top: 2px solid #eee; padding-top: 8px; margin-top: 4px; }
-.profit-table th { font-size: 11px; color: #aaa; text-transform: uppercase; padding: 3px 4px; }
-.profit-table td { padding: 3px 4px; }
-.profit-table td:not(:first-child) { text-align: right; }
-.profit-pos { color: #16a34a; font-weight: 600; }
-.profit-neg { color: #dc2626; font-weight: 600; }
+.menu-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; }
+.menu-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.menu-card-name { font-weight: 700; font-size: 15.5px; }
+.menu-card-actions { display: flex; gap: 6px; }
+.menu-card-total { display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; background: #fbf1e6; border-radius: 8px; margin-bottom: 14px; }
+.menu-card-total-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .5px; color: rgba(42,31,22,.55); font-weight: 700; }
+.menu-card-total-value { font-size: 19px; font-weight: 800; color: var(--ink); line-height: 1; }
+.menu-card-channels { display: flex; gap: 28px; }
+.menu-card-channel-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .5px; color: rgba(42,31,22,.45); font-weight: 700; margin-bottom: 3px; }
+.menu-card-profit { font-size: 16px; font-weight: 800; }
+.menu-card-profit .margin { font-size: 12px; font-weight: 600; }
+.profit-pos { color: var(--success); }
+.profit-neg { color: var(--danger); }
+.menu-card-details { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--card-border); }
+.menu-card-details-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .5px; color: rgba(42,31,22,.4); font-weight: 700; margin-bottom: 6px; }
+.menu-card-details-line { display: flex; justify-content: space-between; font-size: 12.5px; padding: 3px 0; color: rgba(42,31,22,.75); }
+.menu-card-details-total { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; padding: 8px 0 0; margin-top: 6px; border-top: 1px solid var(--card-border); }
 
 /* MODAL */
 .modal-backdrop {
