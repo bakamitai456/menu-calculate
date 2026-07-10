@@ -4,7 +4,7 @@
     {
       "name": "static-server",
       "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
-      "runtimeArgs": ["C:\\Users\\Art\\Documents\\workspaces\\menu-calculate\\.claude\\static-server.mjs", "C:\\Users\\Art\\Documents\\workspaces\\menu-calculate", "8123"],
+      "runtimeArgs": ["C:\\Users\\Art\\OneDrive\\เอกสาร\\workspaces\\menu-calculate\\.claude\\static-server.mjs", "C:\\Users\\Art\\OneDrive\\เอกสาร\\workspaces\\menu-calculate", "8123"],
       "port": 8123
     }
   ]
