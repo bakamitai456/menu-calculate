@@ -30,27 +30,31 @@
       <div class="page-inner">
     <!-- FIXED COSTS SECTION -->
     <section>
-      <h2>Fixed Cost Items</h2>
-      <table id="fcTable">
-        <thead>
-          <tr>
-            <th>Name</th><th>Bulk Qty</th><th>Unit</th><th>Bulk Price (฿)</th><th>Cost / Unit (฿)</th><th>Auto-Add Qty</th><th></th>
-          </tr>
-        </thead>
-        <tbody id="fcBody"></tbody>
-      </table>
-      <div class="add-row mt-2">
-        <button class="btn btn-primary btn-sm" id="showFcAddBtn">+ Add Fixed Cost Item</button>
-        <form id="fcAddForm" style="display:none">
-          <input name="name" placeholder="Name" required>
-          <input name="bulkQty" type="number" min="0.001" step="any" placeholder="Qty" required>
-          <input name="bulkUnit" placeholder="Unit" required>
-          <input name="bulkPrice" type="number" min="0" step="any" placeholder="Price (฿)" required>
-          <button type="submit" class="btn btn-primary btn-sm">Save</button>
-          <button type="button" class="btn btn-ghost btn-sm" id="cancelFcBtn">Cancel</button>
-        </form>
-        <div class="error-msg" id="fcError"></div>
+      <div class="page-header">
+        <h2>Fixed Costs</h2>
+        <button class="btn btn-primary" id="showFcAddBtn">+ Add Fixed Cost Item</button>
       </div>
+      <div class="card">
+        <div style="overflow-x:auto">
+          <table class="data-table" id="fcTable" style="min-width:840px">
+            <thead>
+              <tr>
+                <th>Name</th><th class="text-right">Bulk Qty</th><th>Unit</th><th class="text-right">Bulk ฿</th><th class="text-right">Cost/Unit</th><th class="text-right">Auto-Add Qty</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="fcBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <form id="fcAddForm" class="add-row-card" style="display:none">
+        <input name="name" placeholder="Name" required>
+        <input name="bulkQty" type="number" min="0.001" step="any" placeholder="Qty" required>
+        <input name="bulkUnit" placeholder="Unit" required>
+        <input name="bulkPrice" type="number" min="0" step="any" placeholder="Price (฿)" required>
+        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="cancelFcBtn">Cancel</button>
+      </form>
+      <div class="error-msg" id="fcError"></div>
     </section>
 
     <!-- MENUS SECTION -->

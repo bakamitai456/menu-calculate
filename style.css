@@ -65,13 +65,15 @@ input:focus, select:focus, button:focus { outline: 2px solid var(--accent); outl
 .page-header h2 { font-weight: 800; font-size: 19px; color: var(--text); }
 
 /* TABLES */
-table { width: 100%; border-collapse: collapse; }
-th { text-align: left; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid #eee; padding: 6px 8px; }
-td { padding: 8px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
-tr:last-child td { border-bottom: none; }
-td input[type="text"], td input[type="number"] {
-  width: 100%; padding: 4px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;
-}
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: rgba(42,31,22,.4); border-bottom: 1px solid var(--card-border); padding: 9px 16px; }
+.data-table th.text-right, .data-table td.text-right { text-align: right; }
+.data-table td { padding: 11px 16px; border-bottom: 1px solid rgba(42,31,22,.06); vertical-align: middle; font-size: 13.5px; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table td input[type="text"], .data-table td input[type="number"] { width: 100%; padding: 5px 7px; border: 1px solid rgba(42,31,22,.2); border-radius: 6px; font-size: 12.5px; }
+.data-table tr.editing-row td { background: #fbf1e6; }
+
+.apply-all-tip { position: absolute; top: calc(100% + 6px); right: 0; background: #2a1f14; color: #fff; font-size: 11px; padding: 6px 10px; border-radius: 6px; white-space: nowrap; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,.2); }
 
 /* BUTTONS */
 .btn { padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 700; }
@@ -89,11 +91,11 @@ td input[type="text"], td input[type="number"] {
 
 /* ADD ROW */
 .add-row { margin-top: 10px; }
-.add-row form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
-.add-row form input { padding: 6px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
-.add-row form input[name="name"] { width: 160px; }
-.add-row form input[name="bulkQty"], .add-row form input[name="bulkPrice"] { width: 90px; }
-.add-row form input[name="bulkUnit"] { width: 70px; }
+.add-row-card { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 14px 16px; background: var(--card-bg); border: 1px dashed rgba(42,31,22,.25); border-radius: 12px; margin-top: 10px; }
+.add-row-card input { padding: 7px 10px; border: 1px solid rgba(42,31,22,.2); border-radius: 6px; font-size: 13px; }
+.add-row-card input[name="name"] { flex: 1; min-width: 140px; }
+.add-row-card input[name="bulkQty"], .add-row-card input[name="bulkPrice"] { width: 90px; }
+.add-row-card input[name="bulkUnit"] { width: 70px; }
 
 /* MENU CARDS */
 .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }

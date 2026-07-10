@@ -44,7 +44,9 @@ fcAddForm.addEventListener('submit', e => {
 function startFcEdit(id) {
   const fc = repo.getFixedCosts().find(x => x.id === id);
   if (!fc) return;
-  fcBody.querySelector(`tr[data-id="${id}"]`).innerHTML = renderFixedCostEditCells(fc);
+  const row = fcBody.querySelector(`tr[data-id="${id}"]`);
+  row.classList.add('editing-row');
+  row.innerHTML = renderFixedCostEditCells(fc);
 }
 
 function saveFcEdit(id, row) {
@@ -116,7 +118,7 @@ function confirmBulkAction(message) {
 }
 
 function showAutoAddTooltip(id) {
-  const tip = fcBody.querySelector(`tr[data-id="${id}"] .auto-add-tip`);
+  const tip = fcBody.querySelector(`.apply-all-tip[data-tip-id="${id}"]`);
   if (!tip) return;
   tip.style.display = 'block';
   clearTimeout(tip._hideTimer);
