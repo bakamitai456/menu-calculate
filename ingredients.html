@@ -7,28 +7,27 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav>
-    <span class="brand">Menu Calculator</span>
-    <a href="index.html">Dashboard</a>
-    <a href="ingredients.html" class="active">Ingredients</a>
-    <button class="btn btn-ghost btn-sm" id="exportBtn">Export</button>
-    <button class="btn btn-ghost btn-sm" id="importBtn">Import</button>
-    <div class="mdr-control">
-      MDR <input type="number" id="mdrInput" min="0" max="100" step="0.1"> %
-    </div>
-    <div class="sync-control">
-      <input type="url" id="syncUrlInput" placeholder="Apps Script URL" title="Paste your Google Apps Script Web App URL here">
-      <div class="sync-rate-control" title="How often to sync with Google Sheets">
-        <input type="number" id="syncIntervalInput" min="3" step="1"> s
+  <div class="app-shell">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo"></div>
+        <div class="sidebar-title">Menu Calculator</div>
+        <button class="sidebar-collapse-btn" id="sidebarToggleBtn" title="Collapse">‹</button>
       </div>
-      <button class="btn btn-ghost btn-sm" id="syncNowBtn">Sync Now</button>
-      <div class="sync-status" id="syncStatus" data-status="idle">
-        <span class="sync-dot"></span>
-        <span class="sync-status-text">Idle</span>
+      <div class="sidebar-nav">
+        <a href="index.html" class="sidebar-nav-item"><span>▤</span><span class="nav-label">Dashboard</span></a>
+        <a href="ingredients.html" class="sidebar-nav-item active"><span>☰</span><span class="nav-label">Ingredients</span></a>
+      </div>
+      <div class="sidebar-footer">
+        <div class="sidebar-sync-row">
+          <span class="sidebar-sync-dot" id="sidebarSyncDot" data-status="idle"></span>
+          <span class="nav-label">Synced</span>
+        </div>
+        <button class="sidebar-settings-btn" id="settingsOpenBtn"><span>⚙</span><span class="nav-label">Settings</span></button>
       </div>
     </div>
-  </nav>
-  <main>
+    <div class="main-content">
+      <div class="page-inner">
     <section>
       <h2>Ingredients</h2>
       <table id="ingTable">
@@ -52,7 +51,9 @@
         <div class="error-msg" id="addError"></div>
       </div>
     </section>
-  </main>
+      </div>
+    </div>
+  </div>
   <!-- CONFLICT MODAL -->
   <div class="modal-backdrop" id="conflictModal">
     <div class="modal conflict-modal">
