@@ -1,7 +1,7 @@
 import * as repo from '../io/repository.js';
 import { validateItem } from '../domain/validate.js';
 import { renderIngredientTable, renderIngredientEditCells } from '../render/ingredients.js';
-import { wireMdrControl, wireExportImport, wireSyncControls } from './shared/navControls.js';
+import { wireMdrControl, wireExportImport, wireSyncControls, wireSidebarAndSettings } from './shared/navControls.js';
 
 const tbody = document.getElementById('ingBody');
 const addForm = document.getElementById('addForm');
@@ -80,6 +80,7 @@ tbody.addEventListener('click', e => {
   else if (action === 'cancel-edit') renderIngredients();
 });
 
+wireSidebarAndSettings();
 wireMdrControl();
 wireExportImport();
 wireSyncControls({ onSynced: renderIngredients });

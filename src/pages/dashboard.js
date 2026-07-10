@@ -5,8 +5,9 @@ import { applyFixedCostToAllMenus, removeFixedCostFromAllMenus } from '../domain
 import { renderFixedCostTable, renderFixedCostEditCells } from '../render/fixedCosts.js';
 import { renderMenuGrid } from '../render/menus.js';
 import { renderIngRow, renderFcRow, renderPreview } from '../render/menuModal.js';
-import { wireMdrControl, wireExportImport, wireSyncControls } from './shared/navControls.js';
+import { wireMdrControl, wireExportImport, wireSyncControls, wireSidebarAndSettings } from './shared/navControls.js';
 
+wireSidebarAndSettings();
 wireMdrControl(() => renderMenus());
 
 // === FIXED COST ITEMS ===

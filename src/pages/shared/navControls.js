@@ -38,13 +38,36 @@ export function wireExportImport() {
   };
 }
 
+export function wireSidebarAndSettings() {
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('sidebarToggleBtn');
+  toggleBtn.addEventListener('click', () => {
+    const collapsed = sidebar.classList.toggle('collapsed');
+    toggleBtn.textContent = collapsed ? '›' : '‹';
+    toggleBtn.title = collapsed ? 'Expand' : 'Collapse';
+  });
+
+  const backdrop = document.getElementById('settingsBackdrop');
+  const panel = document.getElementById('settingsPanel');
+  const openBtn = document.getElementById('settingsOpenBtn');
+  const closeBtn = document.getElementById('settingsCloseBtn');
+  const open = () => { backdrop.classList.add('open'); panel.classList.add('open'); };
+  const close = () => { backdrop.classList.remove('open'); panel.classList.remove('open'); };
+  openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+}
+
 export function wireSyncControls({ onSynced }) {
   function setSyncStatus(status) {
     const el = document.getElementById('syncStatus');
-    if (!el) return;
-    el.dataset.status = status;
-    const labels = { idle: 'Synced', syncing: 'Syncing...', conflict: 'Conflict', error: 'Error' };
-    el.querySelector('.sync-status-text').textContent = labels[status] || status;
+    if (el) {
+      el.dataset.status = status;
+      const labels = { idle: 'Synced', syncing: 'Syncing...', conflict: 'Conflict', error: 'Error' };
+      el.querySelector('.sync-status-text').textContent = labels[status] || status;
+    }
+    const dot = document.getElementById('sidebarSyncDot');
+    if (dot) dot.dataset.status = status;
   }
 
   const resolveConflicts = createConflictModalController({
