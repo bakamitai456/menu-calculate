@@ -29,27 +29,31 @@
     <div class="main-content">
       <div class="page-inner">
     <section>
-      <h2>Ingredients</h2>
-      <table id="ingTable">
-        <thead>
-          <tr>
-            <th>Name</th><th>Bulk Qty</th><th>Unit</th><th>Bulk Price (฿)</th><th>Cost / Unit (฿)</th><th></th>
-          </tr>
-        </thead>
-        <tbody id="ingBody"></tbody>
-      </table>
-      <div class="add-row mt-2">
-        <button class="btn btn-primary btn-sm" id="showAddBtn">+ Add Ingredient</button>
-        <form id="addForm" style="display:none">
-          <input name="name" placeholder="Name" required>
-          <input name="bulkQty" type="number" min="0.001" step="any" placeholder="Qty" required>
-          <input name="bulkUnit" placeholder="Unit (g/ml/pcs)" required>
-          <input name="bulkPrice" type="number" min="0" step="any" placeholder="Price (฿)" required>
-          <button type="submit" class="btn btn-primary btn-sm">Save</button>
-          <button type="button" class="btn btn-ghost btn-sm" id="cancelAddBtn">Cancel</button>
-        </form>
-        <div class="error-msg" id="addError"></div>
+      <div class="page-header">
+        <h2>Ingredients</h2>
+        <button class="btn btn-primary" id="showAddBtn">+ Add Ingredient</button>
       </div>
+      <div class="card">
+        <div style="overflow-x:auto">
+          <table class="data-table" id="ingTable" style="min-width:860px">
+            <thead>
+              <tr>
+                <th>Name</th><th class="text-right">Bulk Qty</th><th>Unit</th><th class="text-right">Bulk ฿</th><th class="text-right">Cost/Unit</th><th>Used In</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="ingBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <form id="addForm" class="add-row-card" style="display:none">
+        <input name="name" placeholder="Name" required>
+        <input name="bulkQty" type="number" min="0.001" step="any" placeholder="Qty" required>
+        <input name="bulkUnit" placeholder="Unit (g/ml/pcs)" required>
+        <input name="bulkPrice" type="number" min="0" step="any" placeholder="Price (฿)" required>
+        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="cancelAddBtn">Cancel</button>
+      </form>
+      <div class="error-msg" id="addError"></div>
     </section>
       </div>
     </div>

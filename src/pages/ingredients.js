@@ -8,7 +8,9 @@ const addForm = document.getElementById('addForm');
 const addError = document.getElementById('addError');
 
 function renderIngredients() {
-  tbody.innerHTML = renderIngredientTable(repo.getIngredients());
+  const ingredients = repo.getIngredients();
+  const usedInCounts = new Map(ingredients.map(ing => [ing.id, repo.ingredientUsedBy(ing.id).length]));
+  tbody.innerHTML = renderIngredientTable(ingredients, usedInCounts);
 }
 
 document.getElementById('showAddBtn').onclick = () => {
@@ -41,7 +43,9 @@ addForm.addEventListener('submit', e => {
 function startEdit(id) {
   const ing = repo.getIngredients().find(x => x.id === id);
   if (!ing) return;
-  tbody.querySelector(`tr[data-id="${id}"]`).innerHTML = renderIngredientEditCells(ing);
+  const row = tbody.querySelector(`tr[data-id="${id}"]`);
+  row.classList.add('editing-row');
+  row.innerHTML = renderIngredientEditCells(ing);
 }
 
 function saveEdit(id, row) {
