@@ -299,7 +299,6 @@ function openAddMenu() {
   document.getElementById('menuError').textContent = '';
   quickAddForm.style.display = 'none';
   quickIngError.textContent = '';
-  document.getElementById('previewContent').innerHTML = '<span style="color:#aaa;font-size:12px">Fill in ingredients and prices to see profit.</span>';
   modal.classList.add('open'); document.getElementById('menuModalBackdrop').classList.add('open');
   updatePreview();
 }
