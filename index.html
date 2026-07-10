@@ -69,10 +69,14 @@
     </div>
   </div>
 
-  <!-- MENU MODAL -->
-  <div class="modal-backdrop" id="menuModal">
-    <div class="modal">
+  <!-- MENU PANEL -->
+  <div class="panel-backdrop" id="menuModalBackdrop"></div>
+  <div class="panel panel-right" id="menuModal">
+    <div class="panel-header">
       <h2 id="modalTitle">Add Menu</h2>
+      <button class="panel-close-btn" id="cancelMenuBtn">✕</button>
+    </div>
+    <div class="panel-body">
       <input type="hidden" id="menuId">
 
       <label>Menu Name</label>
@@ -106,14 +110,15 @@
       <label>Delivery Selling Price (฿)</label>
       <input type="number" id="deliveryPrice" min="0" step="any" placeholder="0.00">
 
+      <div class="error-msg" id="menuError"></div>
+    </div>
+    <div class="menu-panel-footer">
       <div class="preview-box" id="previewBox">
         <h4>Live Preview</h4>
-        <div id="previewContent" style="color:#aaa;font-size:12px">Fill in ingredients and prices to see profit.</div>
+        <div id="previewContent" style="color:rgba(42,31,22,.4);font-size:12px">Fill in ingredients and prices to see profit.</div>
       </div>
-
-      <div class="error-msg" id="menuError"></div>
       <div class="modal-actions">
-        <button class="btn btn-ghost" id="cancelMenuBtn">Cancel</button>
+        <button class="btn btn-ghost" id="cancelMenuBtnFooter">Cancel</button>
         <button class="btn btn-primary" id="saveMenuBtn">Save Menu</button>
       </div>
     </div>

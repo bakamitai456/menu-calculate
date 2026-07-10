@@ -300,7 +300,7 @@ function openAddMenu() {
   quickAddForm.style.display = 'none';
   quickIngError.textContent = '';
   document.getElementById('previewContent').innerHTML = '<span style="color:#aaa;font-size:12px">Fill in ingredients and prices to see profit.</span>';
-  modal.classList.add('open');
+  modal.classList.add('open'); document.getElementById('menuModalBackdrop').classList.add('open');
   updatePreview();
 }
 
@@ -318,13 +318,17 @@ function openEditMenu(id) {
   document.getElementById('deliveryPrice').value = menu.deliveryPrice;
   document.getElementById('menuError').textContent = '';
   quickAddForm.style.display = 'none';
-  modal.classList.add('open');
+  modal.classList.add('open'); document.getElementById('menuModalBackdrop').classList.add('open');
   updatePreview();
 }
 
 document.getElementById('addMenuBtn').onclick = openAddMenu;
-document.getElementById('cancelMenuBtn').onclick = () => modal.classList.remove('open');
-modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+document.getElementById('cancelMenuBtn').onclick = () => { modal.classList.remove('open'); document.getElementById('menuModalBackdrop').classList.remove('open'); };
+document.getElementById('cancelMenuBtnFooter').onclick = () => { modal.classList.remove('open'); document.getElementById('menuModalBackdrop').classList.remove('open'); };
+document.getElementById('menuModalBackdrop').addEventListener('click', () => {
+  modal.classList.remove('open');
+  document.getElementById('menuModalBackdrop').classList.remove('open');
+});
 
 document.getElementById('saveMenuBtn').onclick = () => {
   const name = document.getElementById('menuName').value.trim();
@@ -345,7 +349,7 @@ document.getElementById('saveMenuBtn').onclick = () => {
 
   const id = document.getElementById('menuId').value || crypto.randomUUID();
   repo.saveMenu({ id, name, ingredients: ingData, fixedCostItems: fcData, frontStorePrice, deliveryPrice });
-  modal.classList.remove('open');
+  modal.classList.remove('open'); document.getElementById('menuModalBackdrop').classList.remove('open');
   renderMenus();
 };
 
