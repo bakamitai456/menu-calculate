@@ -124,29 +124,6 @@
     </div>
   </div>
 
-  <!-- CONFLICT MODAL -->
-  <div class="modal-backdrop" id="conflictModal">
-    <div class="modal conflict-modal">
-      <h2>Sync Conflict</h2>
-      <p class="conflict-subtitle">This item was changed on both devices since the last sync.</p>
-      <div class="conflict-counter" id="conflictCounter"></div>
-      <div class="conflict-sides">
-        <div class="conflict-side">
-          <div class="conflict-side-label">Local (this device)</div>
-          <pre id="conflictLocal" class="conflict-data"></pre>
-        </div>
-        <div class="conflict-side">
-          <div class="conflict-side-label">Remote (Google Sheet)</div>
-          <pre id="conflictRemote" class="conflict-data"></pre>
-        </div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn btn-ghost" id="conflictKeepLocal">Keep Local</button>
-        <button class="btn btn-primary" id="conflictKeepRemote">Keep Remote</button>
-      </div>
-    </div>
-  </div>
-
   <!-- BULK UPDATE OVERLAY -->
   <div class="modal-backdrop" id="bulkOverlay">
     <div class="modal" style="text-align:center">

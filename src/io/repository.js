@@ -69,13 +69,6 @@ export function getSyncUrl() {
 export function setSyncUrl(url) {
   storage.setItem(KEYS.syncUrl, url.trim());
 }
-export function getLastSyncAt() {
-  return storage.getItem(KEYS.lastSyncAt) || '1970-01-01T00:00:00.000Z';
-}
-export function setLastSyncAt(ts) {
-  storage.setItem(KEYS.lastSyncAt, ts);
-}
-
 // --- Usage guards ---
 export function ingredientUsedBy(id) {
   return getMenus().filter(m => m.ingredients.some(i => i.ingredientId === id)).map(m => m.name);
@@ -84,10 +77,10 @@ export function fixedCostUsedBy(id) {
   return getMenus().filter(m => m.fixedCostItems.some(f => f.fixedCostItemId === id)).map(m => m.name);
 }
 
-// --- Bulk apply (used by manual sync to write a merged payload) ---
-export function applyMerged(merged) {
-  storage.saveList(KEYS.ingredients, merged.ingredients);
-  storage.saveList(KEYS.fixedCosts, merged.fixedCostItems);
-  storage.saveList(KEYS.menus, merged.menus);
-  storage.saveList(KEYS.tombstones, merged.tombstones);
+// --- Bulk apply (used by manual download to overwrite local storage with a remote payload) ---
+export function applyRemotePayload(payload) {
+  storage.saveList(KEYS.ingredients, payload.ingredients);
+  storage.saveList(KEYS.fixedCosts, payload.fixedCostItems);
+  storage.saveList(KEYS.menus, payload.menus);
+  storage.saveList(KEYS.tombstones, payload.tombstones);
 }

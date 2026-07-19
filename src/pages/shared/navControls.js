@@ -2,10 +2,8 @@ import * as repo from '../../io/repository.js';
 import { buildBackupPayload, serializeBackup, validateBackupShape, parseBackupJSON, buildDatedFilename } from '../../importExport/serialize.js';
 import { triggerDownload, promptForFile, readFileAsText, writeBackupToStorage, reloadPage } from '../../importExport/io.js';
 import { downloadFromRemote, uploadToRemote } from '../../sync/actions.js';
-import { createConflictModalController } from '../../ui/conflictModal.js';
 import { buildLocalPayload } from '../../sync/payload.js';
 import { fetchRemote, pushRemote } from '../../sync/io.js';
-import { merge } from '../../sync/merge.js';
 
 export function wireMdrControl(onChange) {
   const mdrInput = document.getElementById('mdrInput');
@@ -63,38 +61,25 @@ export function wireSyncControls({ onDownloaded }) {
     const el = document.getElementById('syncStatus');
     if (el) {
       el.dataset.status = status;
-      const labels = { idle: 'Idle', downloading: 'Downloading...', uploading: 'Uploading...', conflict: 'Conflict', error: 'Error' };
+      const labels = { idle: 'Idle', downloading: 'Downloading...', uploading: 'Uploading...', error: 'Error' };
       el.querySelector('.sync-status-text').textContent = labels[status] || status;
     }
     const dot = document.getElementById('sidebarSyncDot');
     if (dot) dot.dataset.status = status;
   }
 
-  const resolveConflicts = createConflictModalController({
-    modal: document.getElementById('conflictModal'),
-    counter: document.getElementById('conflictCounter'),
-    localEl: document.getElementById('conflictLocal'),
-    remoteEl: document.getElementById('conflictRemote'),
-    keepLocalBtn: document.getElementById('conflictKeepLocal'),
-    keepRemoteBtn: document.getElementById('conflictKeepRemote'),
-  });
-
   const syncDeps = {
     getSyncUrl: repo.getSyncUrl,
-    getLastSyncAt: repo.getLastSyncAt,
-    setLastSyncAt: repo.setLastSyncAt,
     buildLocalPayload: () => buildLocalPayload({
       ingredients: repo.getIngredients(),
       fixedCostItems: repo.getFixedCosts(),
       menus: repo.getMenus(),
       tombstones: repo.getTombstones(),
     }),
-    applyMerged: repo.applyMerged,
+    applyRemotePayload: repo.applyRemotePayload,
     fetchRemote,
     pushRemote,
-    merge,
     onStatusChange: setSyncStatus,
-    onConflict: resolveConflicts,
     onDownloaded,
   };
 

@@ -52,7 +52,7 @@ input:focus, select:focus, button:focus { outline: 2px solid var(--accent); outl
 .sidebar-sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #555; flex-shrink: 0; }
 .sidebar-sync-dot[data-status="idle"] { background: var(--sync-idle); animation: pulseDot 2s infinite; }
 .sidebar-sync-dot[data-status="downloading"], .sidebar-sync-dot[data-status="uploading"] { background: #f59e0b; animation: pulseDot 1s infinite; }
-.sidebar-sync-dot[data-status="conflict"], .sidebar-sync-dot[data-status="error"] { background: var(--danger); }
+.sidebar-sync-dot[data-status="error"] { background: var(--danger); }
 @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
 .sidebar-settings-btn { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; font-size: 13px; color: #f3e9dc; background: rgba(255,255,255,.06); cursor: pointer; border: none; text-align: left; width: 100%; }
 .sidebar.collapsed .sidebar-settings-btn { justify-content: center; width: 36px; height: 36px; padding: 0; }
@@ -157,14 +157,6 @@ input:focus, select:focus, button:focus { outline: 2px solid var(--accent); outl
   transition: background 0.3s;
 }
 
-/* CONFLICT MODAL */
-.conflict-modal { width: 680px; }
-.conflict-subtitle { color: rgba(42,31,22,.65); font-size: 13.5px; line-height: 1.5; margin-bottom: 8px; }
-.conflict-counter { font-size: 12px; color: rgba(42,31,22,.5); margin-bottom: 14px; }
-.conflict-sides { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-.conflict-side-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: rgba(42,31,22,.5); margin-bottom: 6px; letter-spacing: .4px; }
-.conflict-data { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 10px 12px; font-size: 12px; font-family: monospace; white-space: pre-wrap; word-break: break-word; min-height: 80px; color: var(--text); }
-
 /* SLIDE-OUT PANELS (Settings, Add/Edit Menu) */
 .panel-backdrop { display: none; position: fixed; inset: 0; background: rgba(42,31,22,.45); z-index: 100; }
 .panel-backdrop.open { display: block; }
@@ -183,7 +175,7 @@ input:focus, select:focus, button:focus { outline: 2px solid var(--accent); outl
 .settings-sync-status-label .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #555; }
 .settings-sync-status[data-status="idle"] .sync-dot { background: var(--sync-idle); }
 .settings-sync-status[data-status="downloading"] .sync-dot, .settings-sync-status[data-status="uploading"] .sync-dot { background: #f59e0b; animation: pulseDot 1s infinite; }
-.settings-sync-status[data-status="conflict"] .sync-dot, .settings-sync-status[data-status="error"] .sync-dot { background: var(--danger); }
+.settings-sync-status[data-status="error"] .sync-dot { background: var(--danger); }
 .settings-sync-actions { display: flex; gap: 6px; }
 .settings-data-row { display: flex; gap: 8px; }
 .settings-data-row .btn { flex: 1; }
