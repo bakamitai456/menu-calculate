@@ -57,15 +57,22 @@ export function wireSidebarAndSettings() {
 }
 
 export function wireSyncControls({ onDownloaded }) {
-  function setSyncStatus(status) {
-    const el = document.getElementById('syncStatus');
-    if (el) {
-      el.dataset.status = status;
-      const labels = { idle: 'Idle', downloading: 'Downloading...', uploading: 'Uploading...', error: 'Error' };
-      el.querySelector('.sync-status-text').textContent = labels[status] || status;
+  const overlay = document.getElementById('syncOverlay');
+  const overlayText = document.getElementById('syncOverlayText');
+
+  function onStatusChange(status) {
+    if (status === 'downloading') {
+      overlayText.textContent = 'Downloading…';
+      overlay.classList.add('open');
+    } else if (status === 'uploading') {
+      overlayText.textContent = 'Uploading…';
+      overlay.classList.add('open');
+    } else if (status === 'error') {
+      overlay.classList.remove('open');
+      alert('Sync failed. Please check the URL and your connection, then try again.');
+    } else {
+      overlay.classList.remove('open');
     }
-    const dot = document.getElementById('sidebarSyncDot');
-    if (dot) dot.dataset.status = status;
   }
 
   const syncDeps = {
@@ -79,7 +86,7 @@ export function wireSyncControls({ onDownloaded }) {
     applyRemotePayload: repo.applyRemotePayload,
     fetchRemote,
     pushRemote,
-    onStatusChange: setSyncStatus,
+    onStatusChange,
     onDownloaded,
   };
 

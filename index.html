@@ -19,10 +19,6 @@
         <a href="ingredients.html" class="sidebar-nav-item" title="Ingredients"><span>☰</span><span class="nav-label">Ingredients</span></a>
       </div>
       <div class="sidebar-footer">
-        <div class="sidebar-sync-row">
-          <span class="sidebar-sync-dot" id="sidebarSyncDot" data-status="idle"></span>
-          <span class="nav-label">Synced</span>
-        </div>
         <button class="sidebar-settings-btn" id="settingsOpenBtn"><span>⚙</span><span class="nav-label">Settings</span></button>
       </div>
     </div>
@@ -131,6 +127,14 @@
     </div>
   </div>
 
+  <!-- SYNC LOADING OVERLAY -->
+  <div class="modal-backdrop" id="syncOverlay">
+    <div class="modal" style="text-align:center">
+      <div class="spinner"></div>
+      <p id="syncOverlayText" style="margin:14px 0 0">Downloading…</p>
+    </div>
+  </div>
+
   <!-- BULK ACTION CONFIRM MODAL -->
   <div class="modal-backdrop" id="bulkConfirmModal">
     <div class="modal" style="text-align:center">
@@ -154,13 +158,10 @@
       <input type="number" id="mdrInput" min="0" max="100" step="0.1" class="settings-input">
 
       <div class="settings-section-label">Google Sheets Sync</div>
-      <input type="url" id="syncUrlInput" placeholder="Apps Script Web App URL" class="settings-input" style="margin-bottom:10px">
-      <div class="settings-sync-status" id="syncStatus" data-status="idle">
-        <span class="settings-sync-status-label"><span class="sync-dot"></span><span class="sync-status-text">Idle</span></span>
-        <div class="settings-sync-actions">
-          <button class="btn btn-ghost btn-sm" id="syncDownloadBtn">Download</button>
-          <button class="btn btn-ghost btn-sm" id="syncUploadBtn">Upload</button>
-        </div>
+      <input type="url" id="syncUrlInput" placeholder="Apps Script Web App URL" class="settings-input" style="margin-bottom:20px">
+      <div class="settings-sync-actions">
+        <button class="btn btn-ghost btn-sm" id="syncDownloadBtn">Download</button>
+        <button class="btn btn-ghost btn-sm" id="syncUploadBtn">Upload</button>
       </div>
 
       <div class="settings-section-label">Data</div>
