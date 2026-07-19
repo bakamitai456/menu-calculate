@@ -95,6 +95,40 @@ export function wireSyncControls({ onDownloaded }) {
   syncUrlInput.addEventListener('change', () => {
     repo.setSyncUrl(syncUrlInput.value.trim());
   });
-  document.getElementById('syncDownloadBtn').onclick = () => downloadFromRemote(syncDeps);
-  document.getElementById('syncUploadBtn').onclick = () => uploadToRemote(syncDeps);
+
+  const confirmModal = document.getElementById('syncConfirmModal');
+  const confirmMessage = document.getElementById('syncConfirmMessage');
+  let confirmResolve = null;
+
+  function finishConfirm(result) {
+    confirmModal.classList.remove('open');
+    const resolve = confirmResolve;
+    confirmResolve = null;
+    resolve?.(result);
+  }
+  document.getElementById('syncConfirmOk').onclick = () => finishConfirm(true);
+  document.getElementById('syncConfirmCancel').onclick = () => finishConfirm(false);
+  confirmModal.addEventListener('click', e => { if (e.target === confirmModal) finishConfirm(false); });
+
+  function confirmSyncAction(message) {
+    confirmMessage.textContent = message;
+    confirmModal.classList.add('open');
+    return new Promise(resolve => { confirmResolve = resolve; });
+  }
+
+  function withConfirm(action, message) {
+    return async () => {
+      if (!repo.getSyncUrl()) { alert('Enter a Google Sheets Apps Script URL first.'); return; }
+      if (!await confirmSyncAction(message)) return;
+      action(syncDeps);
+    };
+  }
+  document.getElementById('syncDownloadBtn').onclick = withConfirm(
+    downloadFromRemote,
+    'This will overwrite your local data with the data from Google Sheets. Continue?'
+  );
+  document.getElementById('syncUploadBtn').onclick = withConfirm(
+    uploadToRemote,
+    'This will overwrite the Google Sheet with your local data. Continue?'
+  );
 }
