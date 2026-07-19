@@ -83,14 +83,11 @@ function setAutoAddQty(id, qtyInput) {
 async function runBulkFixedCostUpdate(compute) {
   const overlay = document.getElementById('bulkOverlay');
   overlay.classList.add('open');
-  const wasSyncConfigured = !!repo.getSyncUrl();
-  syncEngine.stop();
   try {
     const now = new Date().toISOString();
     repo.saveMenus(compute(repo.getMenus(), now));
     renderMenus();
   } finally {
-    if (wasSyncConfigured) syncEngine.start();
     overlay.classList.remove('open');
   }
 }
@@ -353,7 +350,7 @@ document.getElementById('saveMenuBtn').onclick = () => {
 };
 
 wireExportImport();
-const syncEngine = wireSyncControls({ onSynced: () => { renderFC(); renderMenus(); } });
+wireSyncControls({ onDownloaded: () => { renderFC(); renderMenus(); } });
 
 // Init
 renderFC();

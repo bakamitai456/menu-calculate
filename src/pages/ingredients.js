@@ -87,6 +87,6 @@ tbody.addEventListener('click', e => {
 wireSidebarAndSettings();
 wireMdrControl();
 wireExportImport();
-wireSyncControls({ onSynced: renderIngredients });
+wireSyncControls({ onDownloaded: renderIngredients });
 
 renderIngredients();

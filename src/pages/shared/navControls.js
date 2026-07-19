@@ -1,7 +1,7 @@
 import * as repo from '../../io/repository.js';
 import { buildBackupPayload, serializeBackup, validateBackupShape, parseBackupJSON, buildDatedFilename } from '../../importExport/serialize.js';
 import { triggerDownload, promptForFile, readFileAsText, writeBackupToStorage, reloadPage } from '../../importExport/io.js';
-import { createSyncEngine } from '../../sync/engine.js';
+import { downloadFromRemote, uploadToRemote } from '../../sync/actions.js';
 import { createConflictModalController } from '../../ui/conflictModal.js';
 import { buildLocalPayload } from '../../sync/payload.js';
 import { fetchRemote, pushRemote } from '../../sync/io.js';
@@ -58,12 +58,12 @@ export function wireSidebarAndSettings() {
   backdrop.addEventListener('click', close);
 }
 
-export function wireSyncControls({ onSynced }) {
+export function wireSyncControls({ onDownloaded }) {
   function setSyncStatus(status) {
     const el = document.getElementById('syncStatus');
     if (el) {
       el.dataset.status = status;
-      const labels = { idle: 'Synced', syncing: 'Syncing...', conflict: 'Conflict', error: 'Error' };
+      const labels = { idle: 'Idle', downloading: 'Downloading...', uploading: 'Uploading...', conflict: 'Conflict', error: 'Error' };
       el.querySelector('.sync-status-text').textContent = labels[status] || status;
     }
     const dot = document.getElementById('sidebarSyncDot');
@@ -79,12 +79,10 @@ export function wireSyncControls({ onSynced }) {
     keepRemoteBtn: document.getElementById('conflictKeepRemote'),
   });
 
-  const syncEngine = createSyncEngine({
+  const syncDeps = {
     getSyncUrl: repo.getSyncUrl,
     getLastSyncAt: repo.getLastSyncAt,
     setLastSyncAt: repo.setLastSyncAt,
-    getSyncInterval: repo.getSyncInterval,
-    setSyncInterval: repo.setSyncInterval,
     buildLocalPayload: () => buildLocalPayload({
       ingredients: repo.getIngredients(),
       fixedCostItems: repo.getFixedCosts(),
@@ -97,27 +95,14 @@ export function wireSyncControls({ onSynced }) {
     merge,
     onStatusChange: setSyncStatus,
     onConflict: resolveConflicts,
-    onSynced,
-  });
+    onDownloaded,
+  };
 
   const syncUrlInput = document.getElementById('syncUrlInput');
   syncUrlInput.value = repo.getSyncUrl();
   syncUrlInput.addEventListener('change', () => {
-    const url = syncUrlInput.value.trim();
-    repo.setSyncUrl(url);
-    url ? syncEngine.start() : syncEngine.stop();
+    repo.setSyncUrl(syncUrlInput.value.trim());
   });
-  document.getElementById('syncNowBtn').onclick = () => syncEngine.syncOnce();
-  if (repo.getSyncUrl()) syncEngine.start();
-
-  const syncIntervalInput = document.getElementById('syncIntervalInput');
-  syncIntervalInput.value = repo.getSyncInterval();
-  syncIntervalInput.addEventListener('change', () => {
-    const seconds = parseInt(syncIntervalInput.value, 10);
-    if (!Number.isFinite(seconds)) return;
-    syncEngine.setIntervalSeconds(seconds);
-    syncIntervalInput.value = repo.getSyncInterval();
-  });
-
-  return syncEngine;
+  document.getElementById('syncDownloadBtn').onclick = () => downloadFromRemote(syncDeps);
+  document.getElementById('syncUploadBtn').onclick = () => uploadToRemote(syncDeps);
 }

@@ -4,7 +4,6 @@ export const KEYS = {
   menus: 'mc_menus',
   mdr: 'mc_mdr',
   syncUrl: 'mc_sync_url',
-  syncInterval: 'mc_sync_interval',
   lastSyncAt: 'mc_last_sync_at',
   tombstones: 'mc_tombstones',
 };

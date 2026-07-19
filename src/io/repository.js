@@ -69,13 +69,6 @@ export function getSyncUrl() {
 export function setSyncUrl(url) {
   storage.setItem(KEYS.syncUrl, url.trim());
 }
-export function getSyncInterval() {
-  const v = parseInt(storage.getItem(KEYS.syncInterval), 10);
-  return Number.isFinite(v) && v >= 3 ? v : 30;
-}
-export function setSyncInterval(seconds) {
-  storage.setItem(KEYS.syncInterval, Math.max(3, Math.round(seconds)));
-}
 export function getLastSyncAt() {
   return storage.getItem(KEYS.lastSyncAt) || '1970-01-01T00:00:00.000Z';
 }
@@ -91,7 +84,7 @@ export function fixedCostUsedBy(id) {
   return getMenus().filter(m => m.fixedCostItems.some(f => f.fixedCostItemId === id)).map(m => m.name);
 }
 
-// --- Bulk apply (used by the sync engine to write a merged payload) ---
+// --- Bulk apply (used by manual sync to write a merged payload) ---
 export function applyMerged(merged) {
   storage.saveList(KEYS.ingredients, merged.ingredients);
   storage.saveList(KEYS.fixedCosts, merged.fixedCostItems);

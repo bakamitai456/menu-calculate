@@ -94,14 +94,12 @@
 
       <div class="settings-section-label">Google Sheets Sync</div>
       <input type="url" id="syncUrlInput" placeholder="Apps Script Web App URL" class="settings-input" style="margin-bottom:10px">
-      <div class="settings-sync-row">
-        <span>Sync every</span>
-        <input type="number" id="syncIntervalInput" min="3" step="1">
-        <span>seconds</span>
-      </div>
       <div class="settings-sync-status" id="syncStatus" data-status="idle">
         <span class="settings-sync-status-label"><span class="sync-dot"></span><span class="sync-status-text">Idle</span></span>
-        <button class="btn btn-ghost btn-sm" id="syncNowBtn">Sync Now</button>
+        <div class="settings-sync-actions">
+          <button class="btn btn-ghost btn-sm" id="syncDownloadBtn">Download</button>
+          <button class="btn btn-ghost btn-sm" id="syncUploadBtn">Upload</button>
+        </div>
       </div>
 
       <div class="settings-section-label">Data</div>
