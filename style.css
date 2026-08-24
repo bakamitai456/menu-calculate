@@ -168,6 +168,16 @@ input:focus, select:focus, button:focus { outline: 2px solid var(--accent); outl
 .settings-data-row { display: flex; gap: 8px; }
 .settings-data-row .btn { flex: 1; }
 
+/* FLOATING QUICK-ADD BAR */
+.fab-bar { position: fixed; bottom: 28px; right: 32px; z-index: 60; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+.fab-btn { display: flex; align-items: center; gap: 8px; padding: 12px 18px; border: none; border-radius: 999px; background: var(--accent); color: #fff; font-size: 13.5px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 20px rgba(42,31,22,.25); transition: background .15s, transform .1s; }
+.fab-btn:hover { background: #9c5f22; transform: translateY(-1px); }
+.fab-btn-icon { font-size: 16px; line-height: 1; font-weight: 800; }
+@media (max-width: 640px) {
+  .fab-bar { bottom: 16px; right: 16px; }
+  .fab-btn { padding: 10px 14px; font-size: 12.5px; }
+}
+
 /* MENU EDIT PANEL */
 .menu-panel-line { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .menu-panel-line .unit-label { font-size: 11.5px; color: rgba(42,31,22,.5); min-width: 26px; }

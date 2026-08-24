@@ -358,6 +358,14 @@ document.getElementById('saveMenuBtn').onclick = () => {
   renderMenus();
 };
 
+// === FLOATING QUICK-ADD BAR ===
+document.getElementById('fabAddFcBtn').onclick = () => {
+  fcAddForm.style.display = 'flex';
+  fcAddForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  fcAddForm.querySelector('[name="name"]').focus();
+};
+document.getElementById('fabAddMenuBtn').onclick = openAddMenu;
+
 wireExportImport();
 wireSyncControls({ onDownloaded: () => { renderFC(); renderMenus(); } });
 
