@@ -33,6 +33,7 @@ export function renderMenuCard(menu, { ingredients, fixedCosts, mdr }, isExpande
       <div class="menu-card-actions">
         <button class="btn btn-ghost btn-sm" data-action="toggle-details" data-id="${esc(menu.id)}">${isExpanded ? '▾' : '▸'} Details</button>
         <button class="btn btn-ghost btn-sm" data-action="edit" data-id="${esc(menu.id)}">Edit</button>
+        <button class="btn btn-ghost btn-sm" data-action="duplicate" data-id="${esc(menu.id)}">Duplicate</button>
         <button class="btn btn-danger btn-sm" data-action="delete" data-id="${esc(menu.id)}">Delete</button>
       </div>
     </div>

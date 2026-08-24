@@ -172,12 +172,21 @@ function doDeleteMenu(id) {
   if (confirm('Delete this menu?')) { repo.deleteMenu(id); renderMenus(); }
 }
 
+function doDuplicateMenu(id) {
+  const menu = repo.getMenus().find(m => m.id === id);
+  if (!menu) return;
+  const { id: _oldId, updatedAt: _updatedAt, ...rest } = menu;
+  repo.saveMenu({ ...rest, id: crypto.randomUUID(), name: `${menu.name} (Copy)` });
+  renderMenus();
+}
+
 menuGrid.addEventListener('click', e => {
   const btn = e.target.closest('button[data-action]');
   if (!btn) return;
   const { action, id } = btn.dataset;
   if (action === 'edit') openEditMenu(id);
   else if (action === 'delete') doDeleteMenu(id);
+  else if (action === 'duplicate') doDuplicateMenu(id);
   else if (action === 'toggle-details') {
     if (expandedMenuIds.has(id)) expandedMenuIds.delete(id); else expandedMenuIds.add(id);
     renderMenus();
