@@ -168,6 +168,25 @@ input:focus, select:focus, button:focus { outline: 2px solid var(--accent); outl
 .settings-data-row { display: flex; gap: 8px; }
 .settings-data-row .btn { flex: 1; }
 
+/* MENU FILTER BAR */
+.filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+.filter-input { padding: 8px 12px; border: 1px solid rgba(42,31,22,.2); border-radius: 8px; font-size: 13px; min-width: 200px; }
+
+.ms-dropdown { position: relative; }
+.ms-dropdown-toggle { display: flex; align-items: center; gap: 6px; padding: 8px 12px; border: 1px solid rgba(42,31,22,.2); border-radius: 8px; background: #fff; font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; }
+.ms-dropdown-toggle:hover { background: #f8f2ea; }
+.ms-dropdown.open .ms-dropdown-toggle { border-color: var(--accent); }
+.ms-caret { font-size: 10px; color: rgba(42,31,22,.4); }
+.ms-count { background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 800; padding: 1px 6px; border-radius: 999px; line-height: 1.5; }
+.ms-dropdown-panel { display: none; position: absolute; top: calc(100% + 6px); left: 0; width: 240px; background: #fff; border: 1px solid var(--card-border); border-radius: 10px; box-shadow: 0 12px 28px rgba(42,31,22,.18); z-index: 40; padding: 10px; }
+.ms-dropdown.open .ms-dropdown-panel { display: block; }
+.ms-search { width: 100%; padding: 6px 9px; border: 1px solid rgba(42,31,22,.2); border-radius: 6px; font-size: 12.5px; margin-bottom: 8px; }
+.ms-options { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+.ms-option { display: flex; align-items: center; gap: 8px; padding: 6px; border-radius: 6px; font-size: 12.5px; cursor: pointer; }
+.ms-option:hover { background: #f8f2ea; }
+.ms-option input[type="checkbox"] { flex: none; }
+.ms-empty { font-size: 12px; color: rgba(42,31,22,.4); padding: 8px 4px; }
+
 /* FLOATING QUICK-ADD BAR */
 .fab-bar { position: fixed; bottom: 28px; right: 32px; z-index: 60; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
 .fab-btn { display: flex; align-items: center; gap: 8px; padding: 12px 18px; border: none; border-radius: 999px; background: var(--accent); color: #fff; font-size: 13.5px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 20px rgba(42,31,22,.25); transition: background .15s, transform .1s; }

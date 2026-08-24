@@ -2,9 +2,11 @@ import * as repo from '../io/repository.js';
 import { validateItem } from '../domain/validate.js';
 import { calcMenu } from '../domain/calc.js';
 import { applyFixedCostToAllMenus, removeFixedCostFromAllMenus } from '../domain/bulkFixedCost.js';
+import { filterMenus } from '../domain/menuFilter.js';
 import { renderFixedCostTable, renderFixedCostEditCells } from '../render/fixedCosts.js';
 import { renderMenuGrid } from '../render/menus.js';
 import { renderIngRow, renderFcRow, renderPreview } from '../render/menuModal.js';
+import { renderMsOptions } from '../render/filterBar.js';
 import { wireMdrControl, wireExportImport, wireSyncControls, wireSidebarAndSettings } from './shared/navControls.js';
 
 wireSidebarAndSettings();
@@ -159,9 +161,15 @@ fcBody.addEventListener('click', e => {
 // === MENU CARDS ===
 const menuGrid = document.getElementById('menuGrid');
 const expandedMenuIds = new Set();
+const menuFilters = { name: '', ingredientIds: new Set(), fixedCostIds: new Set() };
 
 function renderMenus() {
-  menuGrid.innerHTML = renderMenuGrid(repo.getMenus(), {
+  const menus = filterMenus(repo.getMenus(), {
+    name: menuFilters.name,
+    ingredientIds: [...menuFilters.ingredientIds],
+    fixedCostIds: [...menuFilters.fixedCostIds],
+  });
+  menuGrid.innerHTML = renderMenuGrid(menus, {
     ingredients: repo.getIngredients(),
     fixedCosts: repo.getFixedCosts(),
     mdr: repo.getMDR(),
@@ -192,6 +200,88 @@ menuGrid.addEventListener('click', e => {
     renderMenus();
   }
 });
+
+// === MENU FILTER BAR ===
+const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+function updateClearFiltersVisibility() {
+  const hasFilters = menuFilters.name !== '' || menuFilters.ingredientIds.size > 0 || menuFilters.fixedCostIds.size > 0;
+  clearFiltersBtn.style.display = hasFilters ? '' : 'none';
+}
+
+document.getElementById('menuNameFilter').addEventListener('input', e => {
+  menuFilters.name = e.target.value;
+  updateClearFiltersVisibility();
+  renderMenus();
+});
+
+function wireMsFilter({ dropdownId, toggleId, searchId, optionsId, countId, getItems, selectedIds }) {
+  const dropdown = document.getElementById(dropdownId);
+  const toggle = document.getElementById(toggleId);
+  const search = document.getElementById(searchId);
+  const options = document.getElementById(optionsId);
+  const count = document.getElementById(countId);
+
+  function renderOptions() {
+    options.innerHTML = renderMsOptions(getItems(), selectedIds, search.value);
+  }
+
+  function updateCount() {
+    if (selectedIds.size > 0) { count.textContent = selectedIds.size; count.style.display = ''; }
+    else { count.style.display = 'none'; }
+  }
+
+  toggle.addEventListener('click', () => {
+    const willOpen = !dropdown.classList.contains('open');
+    document.querySelectorAll('.ms-dropdown.open').forEach(el => el.classList.remove('open'));
+    if (willOpen) {
+      dropdown.classList.add('open');
+      search.value = '';
+      renderOptions();
+      search.focus();
+    }
+  });
+
+  search.addEventListener('input', renderOptions);
+
+  options.addEventListener('change', e => {
+    if (!e.target.matches('input[type="checkbox"]')) return;
+    if (e.target.checked) selectedIds.add(e.target.value); else selectedIds.delete(e.target.value);
+    updateCount();
+    updateClearFiltersVisibility();
+    renderMenus();
+  });
+
+  return { renderOptions, updateCount };
+}
+
+const ingMsFilter = wireMsFilter({
+  dropdownId: 'ingFilterDropdown', toggleId: 'ingFilterToggle', searchId: 'ingFilterSearch',
+  optionsId: 'ingFilterOptions', countId: 'ingFilterCount',
+  getItems: () => repo.getIngredients(), selectedIds: menuFilters.ingredientIds,
+});
+const fcMsFilter = wireMsFilter({
+  dropdownId: 'fcFilterDropdown', toggleId: 'fcFilterToggle', searchId: 'fcFilterSearch',
+  optionsId: 'fcFilterOptions', countId: 'fcFilterCount',
+  getItems: () => repo.getFixedCosts(), selectedIds: menuFilters.fixedCostIds,
+});
+
+document.addEventListener('click', e => {
+  document.querySelectorAll('.ms-dropdown.open').forEach(el => {
+    if (!el.contains(e.target)) el.classList.remove('open');
+  });
+});
+
+clearFiltersBtn.onclick = () => {
+  menuFilters.name = '';
+  menuFilters.ingredientIds.clear();
+  menuFilters.fixedCostIds.clear();
+  document.getElementById('menuNameFilter').value = '';
+  ingMsFilter.updateCount();
+  fcMsFilter.updateCount();
+  updateClearFiltersVisibility();
+  renderMenus();
+};
 
 // === MENU MODAL ===
 const modal = document.getElementById('menuModal');

@@ -59,6 +59,35 @@
         <h2>Menus</h2>
         <button class="btn btn-primary" id="addMenuBtn">+ Add Menu</button>
       </div>
+      <div class="filter-bar" id="menuFilterBar">
+        <input type="text" id="menuNameFilter" class="filter-input" placeholder="Search by name…">
+
+        <div class="ms-dropdown" id="ingFilterDropdown">
+          <button type="button" class="ms-dropdown-toggle" id="ingFilterToggle">
+            <span>Ingredients</span>
+            <span class="ms-count" id="ingFilterCount" style="display:none"></span>
+            <span class="ms-caret">▾</span>
+          </button>
+          <div class="ms-dropdown-panel" id="ingFilterPanel">
+            <input type="text" class="ms-search" id="ingFilterSearch" placeholder="Search ingredients…">
+            <div class="ms-options" id="ingFilterOptions"></div>
+          </div>
+        </div>
+
+        <div class="ms-dropdown" id="fcFilterDropdown">
+          <button type="button" class="ms-dropdown-toggle" id="fcFilterToggle">
+            <span>Fixed Costs</span>
+            <span class="ms-count" id="fcFilterCount" style="display:none"></span>
+            <span class="ms-caret">▾</span>
+          </button>
+          <div class="ms-dropdown-panel" id="fcFilterPanel">
+            <input type="text" class="ms-search" id="fcFilterSearch" placeholder="Search fixed costs…">
+            <div class="ms-options" id="fcFilterOptions"></div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-link" id="clearFiltersBtn" style="display:none">Clear filters</button>
+      </div>
       <div id="menuGrid"></div>
     </section>
       </div>
