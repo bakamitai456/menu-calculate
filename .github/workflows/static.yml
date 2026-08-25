@@ -33,6 +33,15 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Cache-bust static assets
+        run: |
+          VERSION="${GITHUB_SHA::8}"
+          echo "Stamping cache-busting version: $VERSION"
+          for f in index.html ingredients.html fixed-costs.html; do
+            sed -i -E "s#(src=\"[^\"]+\.js)\"#\1?v=$VERSION\"#g" "$f"
+            sed -i -E "s#(href=\"[^\"]+\.css)\"#\1?v=$VERSION\"#g" "$f"
+          done
+          find src -name '*.js' -print0 | xargs -0 sed -i -E "s#from '(\.[^']+\.js)'#from '\1?v=$VERSION'#g"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
