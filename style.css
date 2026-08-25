@@ -170,7 +170,7 @@ input:focus, select:focus, button:focus { outline: 2px solid var(--accent); outl
 
 /* MENU LIST SCROLL CONTAINER (dashboard) */
 .main-content-fixed { display: flex; flex-direction: column; }
-.page-inner-fixed { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.page-inner-fixed { display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%; }
 .menu-section { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 .menu-list-scroll { flex: 1; min-height: 0; overflow-y: auto; padding-right: 4px; }
 
