@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ingredients — Menu Calculator</title>
+  <title>Fixed Costs — Menu Calculator</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,8 +16,8 @@
       </div>
       <div class="sidebar-nav">
         <a href="index.html" class="sidebar-nav-item" title="Dashboard"><span>▤</span><span class="nav-label">Dashboard</span></a>
-        <a href="ingredients.html" class="sidebar-nav-item active" title="Ingredients"><span>☰</span><span class="nav-label">Ingredients</span></a>
-        <a href="fixed-costs.html" class="sidebar-nav-item" title="Fixed Costs"><span>฿</span><span class="nav-label">Fixed Costs</span></a>
+        <a href="ingredients.html" class="sidebar-nav-item" title="Ingredients"><span>☰</span><span class="nav-label">Ingredients</span></a>
+        <a href="fixed-costs.html" class="sidebar-nav-item active" title="Fixed Costs"><span>฿</span><span class="nav-label">Fixed Costs</span></a>
       </div>
       <div class="sidebar-footer">
         <button class="sidebar-settings-btn" id="settingsOpenBtn"><span>⚙</span><span class="nav-label">Settings</span></button>
@@ -27,31 +27,49 @@
       <div class="page-inner">
     <section>
       <div class="page-header">
-        <h2>Ingredients</h2>
-        <button class="btn btn-primary" id="showAddBtn">+ Add Ingredient</button>
+        <h2>Fixed Costs</h2>
+        <button class="btn btn-primary" id="showFcAddBtn">+ Add Fixed Cost Item</button>
       </div>
       <div class="card">
         <div style="overflow-x:auto">
-          <table class="data-table" id="ingTable" style="min-width:860px">
+          <table class="data-table" id="fcTable" style="min-width:840px">
             <thead>
               <tr>
-                <th>Name</th><th class="text-right">Bulk Qty</th><th>Unit</th><th class="text-right">Bulk ฿</th><th class="text-right">Cost/Unit</th><th>Used In</th><th></th>
+                <th>Name</th><th class="text-right">Bulk Qty</th><th>Unit</th><th class="text-right">Bulk ฿</th><th class="text-right">Cost/Unit</th><th class="text-right">Auto-Add Qty</th><th></th>
               </tr>
             </thead>
-            <tbody id="ingBody"></tbody>
+            <tbody id="fcBody"></tbody>
           </table>
         </div>
       </div>
-      <form id="addForm" class="add-row-card" style="display:none">
+      <form id="fcAddForm" class="add-row-card" style="display:none">
         <input name="name" placeholder="Name" required>
         <input name="bulkQty" type="number" min="0.001" step="any" placeholder="Qty" required>
-        <input name="bulkUnit" placeholder="Unit (g/ml/pcs)" required>
+        <input name="bulkUnit" placeholder="Unit" required>
         <input name="bulkPrice" type="number" min="0" step="any" placeholder="Price (฿)" required>
         <button type="submit" class="btn btn-primary btn-sm">Save</button>
-        <button type="button" class="btn btn-ghost btn-sm" id="cancelAddBtn">Cancel</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="cancelFcBtn">Cancel</button>
       </form>
-      <div class="error-msg" id="addError"></div>
+      <div class="error-msg" id="fcError"></div>
     </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- BULK UPDATE OVERLAY -->
+  <div class="modal-backdrop" id="bulkOverlay">
+    <div class="modal" style="text-align:center">
+      <p style="margin:0">Updating menus…</p>
+    </div>
+  </div>
+
+  <!-- BULK ACTION CONFIRM MODAL -->
+  <div class="modal-backdrop" id="bulkConfirmModal">
+    <div class="modal" style="text-align:center">
+      <p id="bulkConfirmMessage"></p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="bulkConfirmCancel">Cancel</button>
+        <button class="btn btn-primary" id="bulkConfirmOk">Confirm</button>
       </div>
     </div>
   </div>
@@ -101,6 +119,6 @@
     </div>
   </div>
 
-  <script type="module" src="src/pages/ingredients.js"></script>
+  <script type="module" src="src/pages/fixedCosts.js"></script>
 </body>
 </html>
