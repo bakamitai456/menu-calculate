@@ -52,7 +52,7 @@ input:focus, select:focus, button:focus { outline: 2px solid var(--accent); outl
 
 /* MAIN */
 .main-content { flex: 1; height: 100%; overflow-y: auto; }
-.page-inner { max-width: 960px; margin: 0 auto; padding: 36px 44px 90px; }
+.page-inner { max-width: 1200px; margin: 0 auto; padding: 36px 28px 90px; }
 .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .page-header h2 { font-weight: 800; font-size: 19px; color: var(--text); }
 
