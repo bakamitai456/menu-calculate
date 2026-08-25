@@ -168,6 +168,12 @@ input:focus, select:focus, button:focus { outline: 2px solid var(--accent); outl
 .settings-data-row { display: flex; gap: 8px; }
 .settings-data-row .btn { flex: 1; }
 
+/* MENU LIST SCROLL CONTAINER (dashboard) */
+.main-content-fixed { display: flex; flex-direction: column; }
+.page-inner-fixed { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.menu-section { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.menu-list-scroll { flex: 1; min-height: 0; overflow-y: auto; padding-right: 4px; }
+
 /* MENU FILTER BAR */
 .filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
 .filter-input { padding: 8px 12px; border: 1px solid rgba(42,31,22,.2); border-radius: 8px; font-size: 13px; min-width: 200px; }
